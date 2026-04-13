@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Couleur de fond -->
-    <item android:drawable="@color/white" />
 
-
-    <!-- logo centré -->
+    <!-- Fond couleur verte pour éviter le flash blanc -->
+    <item android:drawable="@color/main" />
+    <!-- Image en plein écran -->
     <item>
         <bitmap
-            android:gravity="center"
-            android:src="@mipmap/splash_logo" />
+            android:gravity="fill"
+            android:src="@drawable/splash" />
     </item>
+
 </layer-list>
