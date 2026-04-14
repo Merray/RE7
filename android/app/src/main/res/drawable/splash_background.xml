@@ -4,10 +4,16 @@
     <!-- Fond couleur verte pour éviter le flash blanc -->
     <item android:drawable="@color/main" />
     <!-- Image en plein écran -->
-    <item>
+    <!-- <item>
         <bitmap
             android:gravity="fill"
-            android:src="@drawable/splash" />
+            android:src="@drawable/splash_1440x2560" />
+    </item> -->
+
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/re7_logo_transparent" />
     </item>
 
 </layer-list>
