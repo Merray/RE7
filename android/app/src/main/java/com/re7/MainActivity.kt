@@ -1,4 +1,4 @@
-package com.recipize
+package com.re7
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

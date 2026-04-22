@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "912554800484",
+    "project_id": "re7---app-de-cuisine",
+    "storage_bucket": "re7---app-de-cuisine.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912554800484:android:48a9ae6db93147cc883671",
+        "android_client_info": {
+          "package_name": "com.re7"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfv0A3lITP7EXQYKGVdt4qALo1jlKLt7E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

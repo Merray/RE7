@@ -1,0 +1,61 @@
+export const INGREDIENTS = [
+  // 🥩 PROTÉINES
+  { label: 'Poulet', category: 'proteines' },
+  { label: 'Boeuf', category: 'proteines' },
+  { label: 'Porc', category: 'proteines' },
+  { label: 'Agneau', category: 'proteines' },
+  { label: 'Dinde', category: 'proteines' },
+  { label: 'Saumon', category: 'proteines' },
+  { label: 'Thon', category: 'proteines' },
+  { label: 'Poisson blanc', category: 'proteines' },
+  { label: 'Crevettes', category: 'proteines' },
+  { label: 'Oeuf', category: 'proteines' },
+  { label: 'Tofu', category: 'proteines' },
+  { label: 'Lentilles', category: 'proteines' },
+  { label: 'Pois chiches', category: 'proteines' },
+
+  // 🍝 FÉCULENTS
+  { label: 'Riz', category: 'feculents' },
+  { label: 'Pâtes', category: 'feculents' },
+  { label: 'Spaghetti', category: 'feculents' },
+  { label: 'Tagliatelles', category: 'feculents' },
+  { label: 'Quinoa', category: 'feculents' },
+  { label: 'Semoule', category: 'feculents' },
+  { label: 'Boulgour', category: 'feculents' },
+  { label: 'Patate', category: 'feculents' },
+  { label: 'Patate douce', category: 'feculents' },
+  { label: 'Pain', category: 'feculents' },
+  { label: 'Tortilla', category: 'feculents' },
+
+  // 🥦 LÉGUMES
+  { label: 'Tomate', category: 'legumes' },
+  { label: 'Poivron', category: 'legumes' },
+  { label: 'Oignon', category: 'legumes' },
+  { label: 'Ail', category: 'legumes' },
+  { label: 'Carotte', category: 'legumes' },
+  { label: 'Brocoli', category: 'legumes' },
+  { label: 'Courgette', category: 'legumes' },
+  { label: 'Aubergine', category: 'legumes' },
+  { label: 'Champignon', category: 'legumes' },
+  { label: 'Épinards', category: 'legumes' },
+  { label: 'Salade', category: 'legumes' },
+  { label: 'Concombre', category: 'legumes' },
+
+  // 🧂 ÉPICES / ASSAISONNEMENTS
+  { label: 'Sel', category: 'epices' },
+  { label: 'Poivre', category: 'epices' },
+  { label: 'Paprika', category: 'epices' },
+  { label: 'Curry', category: 'epices' },
+  { label: 'Curcuma', category: 'epices' },
+  { label: 'Cumin', category: 'epices' },
+  { label: 'Herbes de Provence', category: 'epices' },
+  { label: 'Basilic', category: 'epices' },
+  { label: 'Persil', category: 'epices' },
+  { label: 'Thym', category: 'epices' },
+  { label: 'Romarin', category: 'epices' },
+  { label: 'Piment', category: 'epices' },
+  { label: 'Sauce soja', category: 'epices' },
+  { label: 'Huile d’olive', category: 'epices' },
+].sort((a, b) =>
+  a.label.localeCompare(b.label, 'fr', { sensitivity: 'base' })
+);

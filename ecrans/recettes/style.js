@@ -7,7 +7,7 @@ const recetteStyle = StyleSheet.create({
         paddingHorizontal: PADDING.horizontal,
         paddingVertical: PADDING.vertical
     },
-    fab: {
+    boutonAjouter: {
   position: 'absolute',
   bottom: 20,
   right: 20,
@@ -18,12 +18,6 @@ const recetteStyle = StyleSheet.create({
   justifyContent: 'center',
   alignItems: 'center',
   elevation: 8,
-},
-
-fabText: {
-  color: 'white',
-  fontSize: 30,
-  fontWeight: 'bold',
 },
 })
 

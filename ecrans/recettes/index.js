@@ -20,10 +20,9 @@ const Recettes = ({ navigation }) => {
           )
         }} />
 
-        /* Bouton pour ajouter */
         <TouchableOpacity
-        style={recetteStyle.fab}
-        activeOpacity={0.8} // Pour effet de pression
+        style={recetteStyle.boutonAjouter}
+        activeOpacity={0.6} // Pour effet de pression
         onPress={() => navigation.navigate('recetteFormulaire')}
       >
         <MaterialCommunityIcons name="plus" size={35} color="white" />

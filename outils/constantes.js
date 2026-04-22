@@ -3,6 +3,8 @@ export const COULEURS = {
     secondary: '#2bd18eff',
     blanc: '#ffffffff',
     noir: '#000',
+    rouge: '#ff4d4d',
+    bleu: '#3e91ee',
     iconColor: '#eaebef'
 };
 
