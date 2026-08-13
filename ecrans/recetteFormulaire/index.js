@@ -7,13 +7,94 @@ import firestore from '@react-native-firebase/firestore';
 import { INGREDIENTS } from '../../outils/ingredientsData';
 import { CATEGORY_COLORS } from '../../outils/constantes';
 import IngredientModal from '../../composants/ingredientModal';
+import { launchImageLibrary } from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
+import { Alert } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
-const RecetteFormulaire = () => {
+const RecetteFormulaire = ({ navigation }) => {
   const [nom, setNom] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState([]);
   const [preparation, setPreparation] = useState(['']);
   const [modalVisible, setModalVisible] = useState(false);
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Validation des champs non vides
+  const validerFormulaire = () => {
+    if (!image) {
+      Alert.alert("Erreur", "Ajoute une photo 📸");
+      return false;
+    }
+
+    if (!nom.trim()) {
+      Alert.alert("Erreur", "Le nom est obligatoire");
+      return false;
+    }
+
+    if (!description.trim()) {
+      Alert.alert("Erreur", "La description est obligatoire");
+      return false;
+    }
+
+    if (ingredients.length === 0) {
+      Alert.alert("Erreur", "Ajoute au moins un ingrédient");
+      return false;
+    }
+
+    const cleanPreparation = preparation.filter(p => p.trim() !== '');
+
+    if (cleanPreparation.length === 0) {
+      Alert.alert("Erreur", "Ajoute au moins une étape");
+      return false;
+    }
+
+    return true;
+  };
+
+  //Upload de l'image sur firebase storage
+  const uploadImage = async (uri) => {
+    if (!uri) return null;
+
+    try {
+      const filename = uri.substring(uri.lastIndexOf('/') + 1);
+
+      const reference = storage().ref(`recettes/${Date.now()}_${filename}`);
+
+      await reference.putFile(uri);
+
+      const url = await reference.getDownloadURL();
+
+      return url;
+
+    } catch (error) {
+      console.error('Erreur upload image:', error);
+      return null;
+    }
+  };
+
+  // Choix de la photo de la recette
+  const choisirImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 0.7,
+        maxWidth: 1000,
+        maxHeight: 1000,
+      },
+      (response) => {
+        if (response.didCancel) return;
+        if (response.errorCode) {
+          console.error(response.errorMessage);
+          return;
+        }
+
+        const uri = response.assets[0].uri;
+        setImage(uri);
+      }
+    );
+  };
 
   // Ajouter un ingrédient
   const addIngredient = (ingredient) => {
@@ -51,24 +132,47 @@ const RecetteFormulaire = () => {
 
   // sauvegarde de la recette dans Firebase
   const sauvegarder = async () => {
+    if (loading) return;
+    if (!validerFormulaire()) return;
     try {
-      // Nettoyage des tableaux
+      setLoading(true);
       const cleanIngredients = ingredients;
       const cleanPreparation = preparation.filter(p => p.trim() !== '');
 
-      // Enregistrement
+
+      const imageUrl = await uploadImage(image);
+
       await firestore().collection('recettes').add({
         nom,
         description,
         ingredients: cleanIngredients,
         preparation: cleanPreparation,
+        image: imageUrl,
         createdAt: new Date(),
       });
 
+      setLoading(false);
+
       console.log('Recette enregistrée');
+      Alert.alert(
+        "🎉 Bravo 🎉",
+        "Ta recette a bien été enregistrée !",
+        [
+          {
+            text: "Retour au Dashboard",
+            onPress: () => navigation.navigate('dashboard', {
+              screen: 'tabs_dashboard',
+            })
+          }
+        ]
+      );
 
     } catch (error) {
       console.error('Erreur Firebase:', error);
+      Alert.alert(
+        "Erreur ❌",
+        "Une erreur est survenue lors de l'enregistrement"
+      );
     }
   };
 
@@ -88,6 +192,28 @@ const RecetteFormulaire = () => {
             marginBottom: 15,
           }}
         />
+
+        <View style={recetteFormulaireStyle.card}>
+          <Text style={recetteFormulaireStyle.sectionTitle}>
+            📸 Photo de la recette
+          </Text>
+
+          <TouchableOpacity
+            onPress={choisirImage}
+            style={recetteFormulaireStyle.imagePicker}
+          >
+            {image ? (
+              <Image
+                source={{ uri: image }}
+                style={recetteFormulaireStyle.imagePreview}
+              />
+            ) : (
+              <Text style={{ color: '#888' }}>
+                Ajouter une photo
+              </Text>
+            )}
+          </TouchableOpacity>
+        </View>
 
         {/* Nom */}
         <TitreInput
@@ -152,10 +278,10 @@ const RecetteFormulaire = () => {
           </Text>
 
           {preparation.length === 1 && preparation[0] === '' && (
-  <Text style={{ textAlign: 'center', color: '#999', marginTop: 10 }}>
-    👇 Ajoute les étapes de préparation 👇
-  </Text>
-)}
+            <Text style={{ textAlign: 'center', color: '#999', marginTop: 10 }}>
+              👇 Ajoute les étapes de préparation 👇
+            </Text>
+          )}
 
           {preparation.map((step, index) => (
             <View key={index} style={recetteFormulaireStyle.inputRow}>
@@ -198,7 +324,9 @@ const RecetteFormulaire = () => {
         </View>
 
         <TouchableOpacity
-          style={recetteFormulaireStyle.boutonSauvegarder}
+          style={[recetteFormulaireStyle.boutonSauvegarder,
+          loading && {opacity: 0.5}]}
+          disabled={loading}
           activeOpacity={0.6}
           onPress={sauvegarder}
         >
@@ -216,6 +344,14 @@ const RecetteFormulaire = () => {
           setModalVisible(false);
         }}
       />
+      {loading && (
+        <View style={recetteFormulaireStyle.loadingOverlay}>
+          <ActivityIndicator size="large" color={COULEURS.blanc} />
+          <Text style={recetteFormulaireStyle.loadingText}>
+            Enregistrement en cours...
+          </Text>
+        </View>
+      )}
 
     </>
 

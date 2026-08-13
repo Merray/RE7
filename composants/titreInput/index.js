@@ -8,6 +8,7 @@ const TitreInput = ({ titre, placeholder, value = '', onChangeText }) => {
       <TextInput
         style={titreInputStyles.input}
         placeholder={placeholder}
+        placeholderTextColor='grey'
         value={value}
         onChangeText={onChangeText}
       />

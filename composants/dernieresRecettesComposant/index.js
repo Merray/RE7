@@ -6,7 +6,7 @@ import { images } from '../../fakeData/fakeImages'
 const DerniereRecetteComposant = ({item}) => {
     return (
         <TouchableOpacity style={derniereRecetteStyle.horizontalFlatListItem}>
-            <Image style={derniereRecetteStyle.imgRecette} source={images[item.img]} />
+            <Image style={derniereRecetteStyle.imgRecette} source={{ uri: item.img }} />
             <Text style={derniereRecetteStyle.mainRecetteText}>{item.mainText}</Text>
             <Text style={derniereRecetteStyle.subRecetteText}>{item.subText}</Text>
         </TouchableOpacity>

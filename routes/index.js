@@ -14,7 +14,7 @@ const Routes = () => {
         <Stack.Screen name="dashboard" component={BottomTabs} />
         <Stack.Screen name="recetteDetail"
           component={RecetteDetail} options={{ headerShown: true }} />
-          <Stack.Screen
+        <Stack.Screen
           name="recetteFormulaire"
           component={RecetteFormulaire}
           options={{ headerShown: true, title: 'Ajouter une recette' }}

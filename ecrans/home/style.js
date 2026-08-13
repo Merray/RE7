@@ -39,6 +39,12 @@ quoteText: {
   textAlign: 'center',
   color: '#555',
 },
+emptyText: {
+  textAlign: 'center',
+  marginTop: 20,
+  color: '#888',
+  fontSize: 14,
+}
 });
 
 export default dashBoardStyles;
