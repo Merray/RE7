@@ -3,32 +3,40 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import styles from './style';
 
-const Connexion = ({ navigation }) => {
+const Inscription = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
+  const [confirmation, setConfirmation] = useState('');
   const [erreur, setErreur] = useState('');
 
-  const seConnecter = async () => {
+  const inscrire = async () => {
     setErreur('');
 
-    try {
-      await auth().signInWithEmailAndPassword(email, motDePasse);
+    if (motDePasse !== confirmation) {
+      setErreur('Les mots de passe ne correspondent pas.');
+      return;
+    }
 
-      // Connexion réussie
+    try {
+      await auth().createUserWithEmailAndPassword(
+        email,
+        motDePasse
+      );
+
       navigation.goBack();
 
     } catch (error) {
-      console.log('Erreur de connexion :', error.code);
+      console.log('Erreur inscription :', error.code);
 
-      setErreur('Email ou mot de passe incorrect.');
+      setErreur('Impossible de créer le compte.');
     }
   };
 
   return (
     <View style={styles.container}>
 
-      <Text style={styles.titre}>Connexion</Text>
+      <Text style={styles.titre}>Inscription</Text>
 
       <TextInput
         style={styles.input}
@@ -49,6 +57,15 @@ const Connexion = ({ navigation }) => {
         secureTextEntry={true}
       />
 
+      <TextInput
+        style={styles.input}
+        placeholder="Confirmer le mot de passe"
+        placeholderTextColor="#777"
+        value={confirmation}
+        onChangeText={setConfirmation}
+        secureTextEntry={true}
+      />
+
       {erreur !== '' && (
         <Text style={styles.erreur}>
           {erreur}
@@ -57,23 +74,15 @@ const Connexion = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.bouton}
-        onPress={seConnecter}
+        onPress={inscrire}
       >
         <Text style={styles.boutonTexte}>
-          Se connecter
+          Créer mon compte
         </Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('inscription')}
-  >
-        <Text style={styles.lien}>
-          Pas encore de compte ? S'inscrire
-        </Text>
-    </TouchableOpacity>
 
     </View>
   );
 };
 
-export default Connexion;
+export default Inscription;

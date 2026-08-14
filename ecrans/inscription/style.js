@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
     fontSize: 16,
-    color: '#000'
+    color: '#000',
   },
 
   bouton: {
@@ -44,13 +44,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
-  lien: {
-  textAlign: 'center',
-  marginTop: 20,
-  fontSize: 16,
-  fontWeight: 'bold',
-  color: '#000',
-},
 });
 
 export default styles;

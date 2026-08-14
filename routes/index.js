@@ -5,6 +5,7 @@ import BottomTabs from '../ecrans/tabs';
 import RecetteDetail from '../ecrans/recetteDetail';
 import RecetteFormulaire from '../ecrans/recetteFormulaire';
 import Connexion from '../ecrans/connexion';
+import Inscription from '../ecrans/inscription';
 
 const Stack = createNativeStackNavigator()
 
@@ -26,6 +27,14 @@ const Routes = () => {
           options={{
             headerShown: true,
             title: 'Connexion'
+          }}
+        />
+        <Stack.Screen
+          name="inscription"
+          component={Inscription}
+          options={{
+            headerShown: true,
+            title: 'Inscription',
           }}
         />
       </Stack.Navigator>
