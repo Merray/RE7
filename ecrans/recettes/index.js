@@ -1,34 +1,65 @@
-import { View, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { FakeRecettes } from '../../fakeData/fakeRecettes'
-import recetteStyle from './style'
-import RecetteComposant from '../../composants/recetteComposant'
-import HeaderComposant from '../../composants/headerComposant';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
+import recetteStyle from './style';
+import RecetteComposant from '../../composants/recetteComposant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Recettes = ({ navigation }) => {
+
+  const [recettes, setRecettes] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection('recettes')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(querySnapshot => {
+
+        const data = [];
+
+        querySnapshot.forEach(doc => {
+          data.push({
+            id: doc.id,
+            ...doc.data(),
+          });
+        });
+
+        setRecettes(data);
+      });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
+
       <FlatList
-        data={FakeRecettes}
+        data={recettes}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         style={recetteStyle.verticalFLatlist}
-        renderItem={({ item }) => {
-          return (
-            <RecetteComposant item={item} navigation={navigation} />
-          )
-        }} />
+        renderItem={({ item }) => (
+          <RecetteComposant
+            item={item}
+            navigation={navigation}
+          />
+        )}
+      />
 
-        <TouchableOpacity
+      <TouchableOpacity
         style={recetteStyle.boutonAjouter}
-        activeOpacity={0.6} // Pour effet de pression
+        activeOpacity={0.6}
         onPress={() => navigation.navigate('recetteFormulaire')}
       >
-        <MaterialCommunityIcons name="plus" size={35} color="white" />
+        <MaterialCommunityIcons
+          name="plus"
+          size={35}
+          color="white"
+        />
       </TouchableOpacity>
-    </View>
-  )
-}
 
-export default Recettes
+    </View>
+  );
+};
+
+export default Recettes;
