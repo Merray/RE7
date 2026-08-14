@@ -1,7 +1,5 @@
-import { View, Text, ScrollView, Image, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, Image, FlatList } from 'react-native'
 import dashBoardStyles from './style'
-import { FakeRecettes } from '../../fakeData/fakeRecettes'
-import { images } from '../../fakeData/fakeImages';
 import { FakeQuotes } from '../../fakeData/fakeQuotes';
 import HeaderComposant from '../../composants/headerComposant';
 import DerniereRecetteComposant from '../../composants/dernieresRecettesComposant';
@@ -59,12 +57,7 @@ const Dashboard = () => {
             style={dashBoardStyles.horizontalFlatList}
             renderItem={({ item }) => {
               return (
-                <DerniereRecetteComposant item={{
-                ...item,
-                mainText: item.nom,
-                img: item.image,
-                subText: item.description
-              }} />
+                <DerniereRecetteComposant item={item}/>
               );
             }}
           />
