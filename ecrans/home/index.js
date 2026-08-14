@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 
 
-const Dashboard = () => {
+const Dashboard = ({ navigation }) => {
 
   const randomQuote = FakeQuotes[Math.floor(Math.random() * FakeQuotes.length)];
   const [recettes, setRecettes] = useState([]);
@@ -16,8 +16,8 @@ const Dashboard = () => {
   useEffect(() => {
     const unsubscribe = firestore()
       .collection('recettes')
-      .orderBy('createdAt', 'desc') // 🔥 les plus récentes
-      .limit(4) // 🔥 seulement 4
+      .orderBy('createdAt', 'desc')
+      .limit(4)
       .onSnapshot(querySnapshot => {
         const data = [];
 
@@ -37,7 +37,7 @@ const Dashboard = () => {
   return (
     <ScrollView>
       {/* Debut header */}
-      <HeaderComposant />
+      <HeaderComposant navigation={navigation} />
       {/* Fin header */}
       <Image source={require('./../../assets/image_cuisine.jpg')} style={dashBoardStyles.imageCuisine}></Image>
       {/* Debut recettes */}
