@@ -57,4 +57,63 @@ export default StyleSheet.create({
         lineHeight: 22,
         flexShrink: 1
     },
+    createurContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f2f2f2',
+        paddingHorizontal: PADDING.horizontal,
+        paddingVertical: 10,
+    },
+
+    createurPhoto: {
+        width: 45,
+        height: 45,
+        borderRadius: 23,
+        borderWidth: 2,
+        borderColor: COULEURS.main,
+    },
+
+    createurInfos: {
+        marginLeft: 10,
+    },
+
+    createurLabel: {
+        fontSize: 13,
+        color: '#777',
+    },
+
+    createurPseudo: {
+        fontSize: TEXT_SIZE.secondary,
+        fontWeight: 'bold',
+        color: COULEURS.main,
+    },
+    createurContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 10,
+    },
+
+    createurPhoto: {
+        width: 55,
+        height: 55,
+        borderRadius: 55 / 2,
+        borderWidth: 3,
+        borderColor: COULEURS.secondary,
+    },
+
+    createurInfos: {
+        marginLeft: 12,
+    },
+
+    createurLabel: {
+        fontSize: 16,
+        color: '#777',
+    },
+
+    createurPseudo: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: COULEURS.secondary,
+    },
 });
