@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert
+} from 'react-native';
+
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
 import styles from './style';
 
 const Inscription = ({ navigation }) => {
@@ -19,12 +28,36 @@ const Inscription = ({ navigation }) => {
     }
 
     try {
-      await auth().createUserWithEmailAndPassword(
+      const userCredential = await auth().createUserWithEmailAndPassword(
         email,
         motDePasse
       );
 
-      navigation.goBack();
+      const uid = userCredential.user.uid;
+
+      await firestore()
+        .collection('users')
+        .doc(uid)
+        .set({
+          pseudo: '',
+          accroche: '',
+          nombreRecettes: 0,
+          photoURL: null,
+          createdAt: firestore.FieldValue.serverTimestamp(),
+        });
+
+      //navigation.goBack();
+
+      Alert.alert(
+              "🎉 Bienvenue 🎉",
+              "Ton compte a été créé, tu peux maintenant te connecter !",
+              [
+                {
+                  text: "Se connecter",
+                  onPress: () => navigation.navigate('connexion')
+                }
+              ]
+            );
 
     } catch (error) {
       console.log('Erreur inscription :', error.code);

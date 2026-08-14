@@ -6,6 +6,7 @@ import RecetteDetail from '../ecrans/recetteDetail';
 import RecetteFormulaire from '../ecrans/recetteFormulaire';
 import Connexion from '../ecrans/connexion';
 import Inscription from '../ecrans/inscription';
+import ModifierProfil from '../ecrans/modifierProfil';
 
 const Stack = createNativeStackNavigator()
 
@@ -35,6 +36,14 @@ const Routes = () => {
           options={{
             headerShown: true,
             title: 'Inscription',
+          }}
+        />
+        <Stack.Screen
+          name="modifierProfil"
+          component={ModifierProfil}
+          options={{
+            headerShown: true,
+            title: 'Modifier mon profil',
           }}
         />
       </Stack.Navigator>

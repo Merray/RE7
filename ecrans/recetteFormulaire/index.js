@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal, Image } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import TitreInput from '../../composants/titreInput';
 import { COULEURS } from '../../outils/constantes';
 import recetteFormulaireStyle from './style';
@@ -20,6 +21,8 @@ const RecetteFormulaire = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const utilisateur = auth().currentUser;
 
   // Validation des champs non vides
   const validerFormulaire = () => {
@@ -132,8 +135,21 @@ const RecetteFormulaire = ({ navigation }) => {
 
   // sauvegarde de la recette dans Firebase
   const sauvegarder = async () => {
+
+    console.log('🟢 Clic sur Enregistrer');
+    console.log('👤 Utilisateur :', utilisateur);
+
     if (loading) return;
     if (!validerFormulaire()) return;
+
+    if (!utilisateur) {
+      Alert.alert(
+        "Connexion requise",
+        "Tu dois être connecté pour créer une RE7."
+      );
+    return;
+    }
+
     try {
       setLoading(true);
       const cleanIngredients = ingredients;
@@ -149,6 +165,7 @@ const RecetteFormulaire = ({ navigation }) => {
         preparation: cleanPreparation,
         image: imageUrl,
         createdAt: new Date(),
+        createdByUid: utilisateur.uid,
       });
 
       setLoading(false);
@@ -169,6 +186,8 @@ const RecetteFormulaire = ({ navigation }) => {
 
     } catch (error) {
       console.error('Erreur Firebase:', error);
+
+      setLoading(false);
       Alert.alert(
         "Erreur ❌",
         "Une erreur est survenue lors de l'enregistrement"
