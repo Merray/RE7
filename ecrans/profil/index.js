@@ -1,12 +1,24 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import auth from '@react-native-firebase/auth';
 
-const Profil = () => {
+const Profil = ({ navigation }) => {
+
+  console.log('Utilisateur connecté :', auth().currentUser);
+
   return (
     <View>
-      <Text>Page des profils</Text>
-    </View>
-  )
-}
 
-export default Profil
+      <Text>Profil</Text>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate('connexion')}
+      >
+        <Text>Se connecter</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+};
+
+export default Profil;

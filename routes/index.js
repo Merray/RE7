@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomTabs from '../ecrans/tabs';
 import RecetteDetail from '../ecrans/recetteDetail';
 import RecetteFormulaire from '../ecrans/recetteFormulaire';
+import Connexion from '../ecrans/connexion';
 
 const Stack = createNativeStackNavigator()
 
@@ -18,6 +19,14 @@ const Routes = () => {
           name="recetteFormulaire"
           component={RecetteFormulaire}
           options={{ headerShown: true, title: 'Ajouter une recette' }}
+        />
+        <Stack.Screen
+          name="connexion"
+          component={Connexion}
+          options={{
+            headerShown: true,
+            title: 'Connexion'
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
