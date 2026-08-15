@@ -2,11 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Home from '../home';
+import Dashboard from '../dashboard';
 import Recettes from '../recettes';
 import Profil from '../profil';
 import { COULEURS } from '../../outils/constantes';
-import Dashboard from '../home';
 
 const Tab = createBottomTabNavigator();
 
