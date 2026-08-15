@@ -89,7 +89,15 @@ const RecetteDetail = ({ route, navigation }) => {
 
         {/* Créateur */}
         {recette.createdByUid && (
-          <View style={styles.createurContainer}>
+          <TouchableOpacity
+            style={styles.createurContainer}
+            activeOpacity={0.7}
+            onPress={() =>
+              navigation.navigate('profilUtilisateur', {
+                uid: recette.createdByUid,
+              })
+            }
+          >
 
             <Image
               source={
@@ -112,7 +120,7 @@ const RecetteDetail = ({ route, navigation }) => {
 
             </View>
 
-          </View>
+          </TouchableOpacity>
         )}
 
       </View>
