@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 import { CATEGORY_COLORS } from '../../outils/constantes';
 import styles from './style';
@@ -18,6 +19,10 @@ const RecetteDetail = ({ route, navigation }) => {
 
   const [activeTab, setActiveTab] = useState('ingredients');
   const [createur, setCreateur] = useState(null);
+  const utilisateur = auth().currentUser;
+
+  const estCreateur = utilisateur?.uid === recette.createdByUid;
+
 
   useEffect(() => {
 
@@ -88,39 +93,70 @@ const RecetteDetail = ({ route, navigation }) => {
         </Text>
 
         {/* Créateur */}
+        {/* Créateur */}
         {recette.createdByUid && (
-          <TouchableOpacity
-            style={styles.createurContainer}
-            activeOpacity={0.7}
-            onPress={() =>
-              navigation.navigate('profilUtilisateur', {
-                uid: recette.createdByUid,
-              })
-            }
-          >
+          <View style={styles.createurContainer}>
 
-            <Image
-              source={
-                createur?.photoURL
-                  ? { uri: createur.photoURL }
-                  : require('../../assets/avatar_default.png')
+            {/* Profil du créateur */}
+            <TouchableOpacity
+              style={styles.createurProfil}
+              activeOpacity={0.7}
+              onPress={() =>
+                navigation.navigate('profilUtilisateur', {
+                  uid: recette.createdByUid,
+                })
               }
-              style={styles.createurPhoto}
-            />
+            >
 
-            <View style={styles.createurInfos}>
+              <Image
+                source={
+                  createur?.photoURL
+                    ? { uri: createur.photoURL }
+                    : require('../../assets/avatar_default.png')
+                }
+                style={styles.createurPhoto}
+              />
 
-              <Text style={styles.createurLabel}>
-                Créée par
-              </Text>
+              <View style={styles.createurInfos}>
 
-              <Text style={styles.createurPseudo}>
-                {createur?.pseudo || 'Utilisateur'}
-              </Text>
+                <Text style={styles.createurLabel}>
+                  Créée par
+                </Text>
 
-            </View>
+                <Text style={styles.createurPseudo}>
+                  {createur?.pseudo || 'Utilisateur'}
+                </Text>
 
-          </TouchableOpacity>
+              </View>
+
+            </TouchableOpacity>
+
+            {/* Boutons du créateur */}
+            {estCreateur && (
+              <View style={styles.actionsContainer}>
+
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onPress={() => console.log('Modifier la recette')}
+                >
+                  <Text style={styles.actionButtonText}>
+                    ✏️
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.deleteButton]}
+                  onPress={() => console.log('Supprimer la recette')}
+                >
+                  <Text style={styles.actionButtonText}>
+                    🗑️
+                  </Text>
+                </TouchableOpacity>
+
+              </View>
+            )}
+
+          </View>
         )}
 
       </View>

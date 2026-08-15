@@ -116,4 +116,33 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: COULEURS.secondary,
     },
+    createurProfil: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+    },
+
+    actionsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 10,
+    },
+
+    actionButton: {
+        width: 42,
+        height: 42,
+        borderRadius: 21,
+        backgroundColor: COULEURS.main,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 8,
+    },
+
+    deleteButton: {
+        backgroundColor: COULEURS.rouge,
+    },
+
+    actionButtonText: {
+        fontSize: 19,
+    },
 });
