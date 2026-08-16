@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal, Image } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import TitreInput from '../../composants/titreInput';
@@ -13,7 +13,7 @@ import storage from '@react-native-firebase/storage';
 import { Alert } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-const RecetteFormulaire = ({ navigation }) => {
+const RecetteFormulaire = ({ navigation, route }) => {
   const [nom, setNom] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState([]);
@@ -21,8 +21,29 @@ const RecetteFormulaire = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const recetteAModifier = route?.params?.recette;
 
   const utilisateur = auth().currentUser;
+
+  useEffect(() => {
+
+    navigation.setOptions({
+      title: recetteAModifier
+        ? 'Modifier une recette'
+        : 'Ajouter une recette',
+    });
+
+    if (!recetteAModifier) {
+      return;
+    }
+
+    setNom(recetteAModifier.nom);
+    setDescription(recetteAModifier.description);
+    setIngredients(recetteAModifier.ingredients);
+    setPreparation(recetteAModifier.preparation);
+    setImage(recetteAModifier.image);
+
+  }, [recetteAModifier]);
 
   // Validation des champs non vides
   const validerFormulaire = () => {
@@ -136,9 +157,6 @@ const RecetteFormulaire = ({ navigation }) => {
   // sauvegarde de la recette dans Firebase
   const sauvegarder = async () => {
 
-    console.log('🟢 Clic sur Enregistrer');
-    console.log('👤 Utilisateur :', utilisateur);
-
     if (loading) return;
     if (!validerFormulaire()) return;
 
@@ -147,7 +165,7 @@ const RecetteFormulaire = ({ navigation }) => {
         "Connexion requise",
         "Tu dois être connecté pour créer une RE7."
       );
-    return;
+      return;
     }
 
     try {
@@ -156,17 +174,36 @@ const RecetteFormulaire = ({ navigation }) => {
       const cleanPreparation = preparation.filter(p => p.trim() !== '');
 
 
-      const imageUrl = await uploadImage(image);
+      let imageUrl = recetteAModifier?.image || null;
 
-      await firestore().collection('recettes').add({
-        nom,
-        description,
-        ingredients: cleanIngredients,
-        preparation: cleanPreparation,
-        image: imageUrl,
-        createdAt: new Date(),
-        createdByUid: utilisateur.uid,
-      });
+      if (image && !image.startsWith('https://')) {
+        imageUrl = await uploadImage(image);
+      }
+
+      if (recetteAModifier) {
+        await firestore()
+          .collection('recettes')
+          .doc(recetteAModifier.id)
+          .update({
+            nom,
+            description,
+            ingredients: cleanIngredients,
+            preparation: cleanPreparation,
+            image: imageUrl,
+          });
+      } else {
+        await firestore()
+          .collection('recettes')
+          .add({
+            nom,
+            description,
+            ingredients: cleanIngredients,
+            preparation: cleanPreparation,
+            image: imageUrl,
+            createdAt: new Date(),
+            createdByUid: utilisateur.uid,
+          });
+      }
 
       setLoading(false);
 
@@ -344,7 +381,7 @@ const RecetteFormulaire = ({ navigation }) => {
 
         <TouchableOpacity
           style={[recetteFormulaireStyle.boutonSauvegarder,
-          loading && {opacity: 0.5}]}
+          loading && { opacity: 0.5 }]}
           disabled={loading}
           activeOpacity={0.6}
           onPress={sauvegarder}

@@ -17,7 +17,7 @@ const Dashboard = ({ navigation }) => {
     const unsubscribe = firestore()
       .collection('recettes')
       .orderBy('createdAt', 'desc')
-      .limit(4)
+      .limit(5)
       .onSnapshot(querySnapshot => {
         const data = [];
 

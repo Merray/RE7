@@ -5,10 +5,12 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 
 import { CATEGORY_COLORS } from '../../outils/constantes';
 import styles from './style';
@@ -70,6 +72,67 @@ const RecetteDetail = ({ route, navigation }) => {
 
   const getIngredientColor = (ing) => {
     return CATEGORY_COLORS[ing.category] || '#999';
+  };
+
+  const supprimerRecette = () => {
+    Alert.alert(
+      'Supprimer la recette',
+      'Es-tu sûr de vouloir supprimer cette recette ? Cette action est irréversible.',
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Supprimer',
+          style: 'destructive',
+          onPress: supprimerRecetteConfirmee,
+        },
+      ]
+    );
+  };
+
+  const supprimerRecetteConfirmee = async () => {
+
+    try {
+
+      // Suppression de l'image dans Firebase Storage
+      if (recette.image) {
+        const imageReference = storage().refFromURL(recette.image);
+        await imageReference.delete();
+      }
+
+      // Suppression de la recette dans Firestore
+      await firestore()
+        .collection('recettes')
+        .doc(recette.id)
+        .delete();
+
+      console.log('Recette supprimée');
+
+      Alert.alert(
+        '🗑️ Recette supprimée',
+        'La recette a bien été supprimée.',
+        [
+          {
+            text: 'Elle était naze de toute façon',
+            onPress: () => navigation.navigate('dashboard', {
+              screen: 'tabs_dashboard',
+            }),
+          },
+        ]
+      );
+
+    } catch (error) {
+
+      console.error('Erreur suppression recette :', error);
+
+      Alert.alert(
+        'Erreur ❌',
+        'Une erreur est survenue lors de la suppression de la recette.'
+      );
+
+    }
   };
 
   return (
@@ -137,7 +200,11 @@ const RecetteDetail = ({ route, navigation }) => {
 
                 <TouchableOpacity
                   style={styles.actionButton}
-                  onPress={() => console.log('Modifier la recette')}
+                  onPress={() =>
+                    navigation.navigate('recetteFormulaire', {
+                      recette,
+                    })
+                  }
                 >
                   <Text style={styles.actionButtonText}>
                     ✏️
@@ -146,7 +213,7 @@ const RecetteDetail = ({ route, navigation }) => {
 
                 <TouchableOpacity
                   style={[styles.actionButton, styles.deleteButton]}
-                  onPress={() => console.log('Supprimer la recette')}
+                  onPress={supprimerRecette}
                 >
                   <Text style={styles.actionButtonText}>
                     🗑️
