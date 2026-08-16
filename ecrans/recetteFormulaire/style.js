@@ -2,6 +2,11 @@ import { StyleSheet } from 'react-native';
 import { COULEURS, TEXT_SIZE, PADDING } from '../../outils/constantes';
 
 const recetteFormulaireStyle = StyleSheet.create({
+
+    // =========================
+    // CONTENEURS / INPUTS
+    // =========================
+
     container: {
         borderWidth: 1,
         borderColor: '#eee',
@@ -12,6 +17,15 @@ const recetteFormulaireStyle = StyleSheet.create({
         backgroundColor: '#fafafa',
         fontSize: TEXT_SIZE.secondary,
     },
+
+    card: {
+        backgroundColor: COULEURS.iconColor,
+        borderRadius: 15,
+        padding: 15,
+        marginTop: 15,
+        elevation: 4,
+    },
+
     sectionTitle: {
         fontWeight: 'bold',
         fontSize: TEXT_SIZE.title,
@@ -19,27 +33,12 @@ const recetteFormulaireStyle = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
     },
-    inputRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
 
-    deleteButton: {
-        marginLeft: 10,
-        marginTop: 8,
-        backgroundColor: COULEURS.rouge,
-        width: 28,
-        height: 28,
-        borderRadius: 18,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
 
-    deleteText: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 18,
-    },
+    // =========================
+    // BOUTONS AJOUT
+    // =========================
+
     boutonAjouter: {
         marginTop: 15,
         alignSelf: 'center',
@@ -55,6 +54,12 @@ const recetteFormulaireStyle = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: TEXT_SIZE.secondary,
     },
+
+
+    // =========================
+    // BOUTON SAUVEGARDER
+    // =========================
+
     boutonSauvegarder: {
         marginTop: 30,
         marginBottom: 40,
@@ -72,13 +77,17 @@ const recetteFormulaireStyle = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: TEXT_SIZE.title,
     },
-    card: {
-        backgroundColor: COULEURS.iconColor,
-        borderRadius: 15,
-        padding: 15,
-        marginTop: 15,
-        elevation: 4,
+
+
+    // =========================
+    // PRÉPARATION
+    // =========================
+
+    inputRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
+
     stepBadge: {
         backgroundColor: COULEURS.main,
         width: 30,
@@ -91,9 +100,32 @@ const recetteFormulaireStyle = StyleSheet.create({
     },
 
     stepText: {
-        color: 'white',
+        color: COULEURS.blanc,
         fontWeight: 'bold',
     },
+
+    deleteButton: {
+        marginLeft: 10,
+        marginTop: 8,
+        backgroundColor: COULEURS.rouge,
+        width: 28,
+        height: 28,
+        borderRadius: 18,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    deleteText: {
+        color: COULEURS.blanc,
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+
+
+    // =========================
+    // PHOTO
+    // =========================
+
     imagePicker: {
         height: 150,
         borderRadius: 12,
@@ -108,6 +140,69 @@ const recetteFormulaireStyle = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
+
+
+    // =========================
+    // QUANTITÉS
+    // =========================
+
+    quantiteRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+
+    quantiteIngredient: {
+        flex: 1,
+        fontSize: TEXT_SIZE.secondary,
+        fontWeight: 'bold',
+        color: COULEURS.noir,
+    },
+
+    quantiteInput: {
+        width: 65,
+        height: 42,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 10,
+        backgroundColor: COULEURS.blanc,
+        paddingVertical: 8,
+        paddingHorizontal: 5,
+        textAlign: 'center',
+        fontSize: TEXT_SIZE.secondary,
+        marginHorizontal: 6,
+    },
+
+    uniteButton: {
+        width: 95,
+        height: 42,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 10,
+        backgroundColor: COULEURS.blanc,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+    },
+
+    uniteButtonText: {
+        fontSize: 14,
+        color: COULEURS.noir,
+        flexShrink: 1,
+    },
+
+    uniteArrow: {
+        fontSize: 10,
+        marginLeft: 5,
+    },
+
+
+    // =========================
+    // LOADING
+    // =========================
+
     loadingOverlay: {
         position: 'absolute',
         top: 0,
@@ -121,9 +216,10 @@ const recetteFormulaireStyle = StyleSheet.create({
 
     loadingText: {
         marginTop: 10,
-        color: 'white',
+        color: COULEURS.blanc,
         fontWeight: 'bold',
     },
+
 });
 
 export default recetteFormulaireStyle;

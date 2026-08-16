@@ -8,6 +8,8 @@ import {
   ScrollView,
   Image,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
@@ -19,6 +21,7 @@ import { ActivityIndicator } from 'react-native-paper';
 
 import TitreInput from '../../composants/titreInput';
 import IngredientModal from '../../composants/ingredientModal';
+import UniteModal from '../../composants/uniteModal';
 
 import {
   COULEURS,
@@ -38,6 +41,9 @@ const RecetteFormulaire = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [uniteModalVisible, setUniteModalVisible] = useState(false);
+  const [ingredientUniteIndex, setIngredientUniteIndex] = useState(null);
 
   const recetteAModifier = route?.params?.recette;
 
@@ -65,6 +71,23 @@ const RecetteFormulaire = ({ navigation, route }) => {
     setImage(recetteAModifier.image);
 
   }, [recetteAModifier]);
+
+  const modifierIngredient = (index, propriete, valeur) => {
+
+    setIngredients(prev => {
+
+      const updated = [...prev];
+
+      updated[index] = {
+        ...updated[index],
+        [propriete]: valeur,
+      };
+
+      return updated;
+
+    });
+
+  };
 
 
   // Validation des champs non vides
@@ -193,33 +216,33 @@ const RecetteFormulaire = ({ navigation, route }) => {
   // Ajouter plusieurs ingrédients
   const addIngredients = (newIngredients) => {
 
-  setIngredients(prev => {
+    setIngredients(prev => {
 
-    const existingLabels = new Set(
-      prev.map(ingredient => ingredient.label)
-    );
+      const existingLabels = new Set(
+        prev.map(ingredient => ingredient.label)
+      );
 
-    const uniqueNewIngredients = newIngredients
-      .filter(
-        ingredient =>
-          !existingLabels.has(ingredient.label)
-      )
-      .map(ingredient => ({
-        ...ingredient,
-        quantite: '',
-        unite: 'g',
-      }));
+      const uniqueNewIngredients = newIngredients
+        .filter(
+          ingredient =>
+            !existingLabels.has(ingredient.label)
+        )
+        .map(ingredient => ({
+          ...ingredient,
+          quantite: '',
+          unite: 'g',
+        }));
 
-    
 
-    return [
-      ...prev,
-      ...uniqueNewIngredients,
-    ];
 
-  });
+      return [
+        ...prev,
+        ...uniqueNewIngredients,
+      ];
 
-};
+    });
+
+  };
 
 
   // Retirer un ingrédient
@@ -411,307 +434,365 @@ const RecetteFormulaire = ({ navigation, route }) => {
 
   return (
     <>
-
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: COULEURS.secondary,
-        }}
-        contentContainerStyle={{
-          padding: 15,
-          paddingBottom: 100,
-        }}
-        keyboardShouldPersistTaps="handled"
-      >
-
-        {/* Image cuisine */}
-        <Image
-          source={require('../../assets/image_cuisine.jpg')}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView
           style={{
-            width: '100%',
-            height: 180,
-            borderRadius: 15,
-            marginBottom: 15,
+            flex: 1,
+            backgroundColor: COULEURS.secondary,
           }}
-        />
+          contentContainerStyle={{
+            padding: 15,
+            paddingBottom: 100,
+          }}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+        >
 
-
-        {/* PHOTO */}
-        <View style={recetteFormulaireStyle.card}>
-
-          <Text
-            style={recetteFormulaireStyle.sectionTitle}
-          >
-            📸 Photo de la recette
-          </Text>
-
-          <TouchableOpacity
-            onPress={choisirImage}
-            style={recetteFormulaireStyle.imagePicker}
-          >
-
-            {image ? (
-
-              <Image
-                source={{ uri: image }}
-                style={recetteFormulaireStyle.imagePreview}
-              />
-
-            ) : (
-
-              <Text style={{ color: '#888' }}>
-                Ajouter une photo
-              </Text>
-
-            )}
-
-          </TouchableOpacity>
-
-        </View>
-
-
-        {/* NOM */}
-        <TitreInput
-          titre="Nom de la recette"
-          placeholder="Ex: Poulet croustillant"
-          value={nom}
-          onChangeText={setNom}
-        />
-
-
-        {/* DESCRIPTION */}
-        <TitreInput
-          titre="Description"
-          placeholder="Décris ta recette..."
-          value={description}
-          onChangeText={setDescription}
-        />
-
-
-        {/* INGREDIENTS */}
-        <View style={recetteFormulaireStyle.card}>
-
-          <Text
-            style={recetteFormulaireStyle.sectionTitle}
-          >
-            🥕 Ingrédients 🥕
-          </Text>
-
-
-          {/* Badges */}
-          <View
+          {/* Image cuisine */}
+          <Image
+            source={require('../../assets/image_cuisine.jpg')}
             style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
+              width: '100%',
+              height: 180,
+              borderRadius: 15,
+              marginBottom: 15,
             }}
-          >
+          />
 
-            {ingredients.map((ingredient, index) => (
 
-              <TouchableOpacity
-                key={index}
-                onPress={() =>
-                  removeIngredient(index)
-                }
-                style={{
-                  backgroundColor:
-                    CATEGORY_COLORS[
-                      ingredient.category
-                    ],
+          {/* PHOTO */}
+          <View style={recetteFormulaireStyle.card}>
 
-                  paddingVertical: 6,
-                  paddingHorizontal: 10,
+            <Text
+              style={recetteFormulaireStyle.sectionTitle}
+            >
+              📸 Photo de la recette
+            </Text>
 
-                  borderRadius: 15,
-                  margin: 5,
-                }}
-              >
+            <TouchableOpacity
+              onPress={choisirImage}
+              style={recetteFormulaireStyle.imagePicker}
+            >
 
-                <Text style={{ color: 'white' }}>
-                  {ingredient.label} ✕
+              {image ? (
+
+                <Image
+                  source={{ uri: image }}
+                  style={recetteFormulaireStyle.imagePreview}
+                />
+
+              ) : (
+
+                <Text style={{ color: '#888' }}>
+                  Ajouter une photo
                 </Text>
 
-              </TouchableOpacity>
+              )}
 
-            ))}
+            </TouchableOpacity>
 
           </View>
 
 
-          {/* Ajouter des ingrédients */}
-          <TouchableOpacity
-            style={recetteFormulaireStyle.boutonAjouter}
-            onPress={() =>
-              setModalVisible(true)
-            }
-          >
+          {/* NOM */}
+          <TitreInput
+            titre="Nom de la recette"
+            placeholder="Ex: Poulet croustillant"
+            value={nom}
+            onChangeText={setNom}
+          />
+
+
+          {/* DESCRIPTION */}
+          <TitreInput
+            titre="Description"
+            placeholder="Décris ta recette..."
+            value={description}
+            onChangeText={setDescription}
+          />
+
+
+          {/* INGREDIENTS */}
+          <View style={recetteFormulaireStyle.card}>
 
             <Text
-              style={
-                recetteFormulaireStyle.boutonAjouterTexte
-              }
+              style={recetteFormulaireStyle.sectionTitle}
             >
-              + Ajouter des ingrédients
+              🥕 Ingrédients 🥕
             </Text>
 
-          </TouchableOpacity>
 
-        </View>
-
-
-        {/* PREPARATION */}
-        <View style={recetteFormulaireStyle.card}>
-
-          <Text
-            style={recetteFormulaireStyle.sectionTitle}
-          >
-            👨‍🍳 Préparation 👨‍🍳
-          </Text>
-
-
-          {preparation.length === 1 &&
-            preparation[0] === '' && (
-
-              <Text
-                style={{
-                  textAlign: 'center',
-                  color: '#999',
-                  marginTop: 10,
-                }}
-              >
-                👇 Ajoute les étapes de préparation 👇
-              </Text>
-
-            )}
-
-
-          {preparation.map((step, index) => (
-
+            {/* Badges */}
             <View
-              key={index}
-              style={
-                recetteFormulaireStyle.inputRow
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
+
+              {ingredients.map((ingredient, index) => (
+
+                <TouchableOpacity
+                  key={index}
+                  onPress={() =>
+                    removeIngredient(index)
+                  }
+                  style={{
+                    backgroundColor:
+                      CATEGORY_COLORS[
+                      ingredient.category
+                      ],
+
+                    paddingVertical: 6,
+                    paddingHorizontal: 10,
+
+                    borderRadius: 15,
+                    margin: 5,
+                  }}
+                >
+
+                  <Text style={{ color: 'white' }}>
+                    {ingredient.label} ✕
+                  </Text>
+
+                </TouchableOpacity>
+
+              ))}
+
+            </View>
+
+
+            {/* Ajouter des ingrédients */}
+            <TouchableOpacity
+              style={recetteFormulaireStyle.boutonAjouter}
+              onPress={() =>
+                setModalVisible(true)
               }
             >
 
-              <View
+              <Text
                 style={
-                  recetteFormulaireStyle.stepBadge
+                  recetteFormulaireStyle.boutonAjouterTexte
+                }
+              >
+                + Ajouter des ingrédients
+              </Text>
+
+            </TouchableOpacity>
+
+          </View>
+
+          {/* QUANTITÉS */}
+          {ingredients.length > 0 && (
+            <View style={recetteFormulaireStyle.card}>
+
+              <Text style={recetteFormulaireStyle.sectionTitle}>
+                📏 Quantités
+              </Text>
+
+              {ingredients.map((ingredient, index) => (
+
+                <View
+                  key={ingredient.label}
+                  style={recetteFormulaireStyle.quantiteRow}
+                >
+
+                  {/* Nom de l'ingrédient */}
+                  <Text style={recetteFormulaireStyle.quantiteIngredient}>
+                    {ingredient.label}
+                  </Text>
+
+                  {/* Quantité */}
+                  <TextInput
+                    value={ingredient.quantite}
+                    onChangeText={(value) =>
+                      modifierIngredient(index, 'quantite', value)
+                    }
+                    placeholder="0"
+                    keyboardType="numeric"
+                    style={recetteFormulaireStyle.quantiteInput}
+                  />
+
+                  {/* Unité */}
+                  <TouchableOpacity
+                    style={recetteFormulaireStyle.uniteButton}
+                    onPress={() => {
+                      setIngredientUniteIndex(index);
+                      setUniteModalVisible(true);
+                    }}
+                  >
+                    <Text style={recetteFormulaireStyle.uniteButtonText}>
+                      {ingredient.unite}
+                    </Text>
+
+                    <Text style={recetteFormulaireStyle.uniteArrow}>
+                      ▼
+                    </Text>
+                  </TouchableOpacity>
+
+                </View>
+
+              ))}
+
+            </View>
+          )}
+
+          {/* PREPARATION */}
+          <View style={recetteFormulaireStyle.card}>
+
+            <Text
+              style={recetteFormulaireStyle.sectionTitle}
+            >
+              👨‍🍳 Préparation 👨‍🍳
+            </Text>
+
+
+            {preparation.length === 1 &&
+              preparation[0] === '' && (
+
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: '#999',
+                    marginTop: 10,
+                  }}
+                >
+                  👇 Ajoute les étapes de préparation 👇
+                </Text>
+
+              )}
+
+
+            {preparation.map((step, index) => (
+
+              <View
+                key={index}
+                style={
+                  recetteFormulaireStyle.inputRow
                 }
               >
 
-                <Text
+                <View
                   style={
-                    recetteFormulaireStyle.stepText
-                  }
-                >
-                  {index + 1}
-                </Text>
-
-              </View>
-
-
-              <TextInput
-                placeholder={`Étape ${index + 1}`}
-                value={step}
-                onChangeText={text =>
-                  updateField(
-                    setPreparation,
-                    preparation,
-                    text,
-                    index
-                  )
-                }
-                style={[
-                  recetteFormulaireStyle.container,
-                  {
-                    flex: 1,
-                  },
-                ]}
-              />
-
-
-              {preparation.length > 1 && (
-
-                <TouchableOpacity
-                  onPress={() =>
-                    removeField(
-                      setPreparation,
-                      preparation,
-                      index
-                    )
-                  }
-                  style={
-                    recetteFormulaireStyle.deleteButton
+                    recetteFormulaireStyle.stepBadge
                   }
                 >
 
                   <Text
                     style={
-                      recetteFormulaireStyle.deleteText
+                      recetteFormulaireStyle.stepText
                     }
                   >
-                    ✕
+                    {index + 1}
                   </Text>
 
-                </TouchableOpacity>
-
-              )}
-
-            </View>
-
-          ))}
+                </View>
 
 
+                <TextInput
+                  placeholder={`Étape ${index + 1}`}
+                  value={step}
+                  onChangeText={text =>
+                    updateField(
+                      setPreparation,
+                      preparation,
+                      text,
+                      index
+                    )
+                  }
+                  style={[
+                    recetteFormulaireStyle.container,
+                    {
+                      flex: 1,
+                    },
+                  ]}
+                />
+
+
+                {preparation.length > 1 && (
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      removeField(
+                        setPreparation,
+                        preparation,
+                        index
+                      )
+                    }
+                    style={
+                      recetteFormulaireStyle.deleteButton
+                    }
+                  >
+
+                    <Text
+                      style={
+                        recetteFormulaireStyle.deleteText
+                      }
+                    >
+                      ✕
+                    </Text>
+
+                  </TouchableOpacity>
+
+                )}
+
+              </View>
+
+            ))}
+
+
+            <TouchableOpacity
+              style={
+                recetteFormulaireStyle.boutonAjouter
+              }
+              onPress={() =>
+                addField(
+                  setPreparation,
+                  preparation
+                )
+              }
+            >
+
+              <Text
+                style={
+                  recetteFormulaireStyle.boutonAjouterTexte
+                }
+              >
+                + Ajouter une étape
+              </Text>
+
+            </TouchableOpacity>
+
+          </View>
+
+
+          {/* SAUVEGARDE */}
           <TouchableOpacity
-            style={
-              recetteFormulaireStyle.boutonAjouter
-            }
-            onPress={() =>
-              addField(
-                setPreparation,
-                preparation
-              )
-            }
+            style={[
+              recetteFormulaireStyle.boutonSauvegarder,
+              loading && {
+                opacity: 0.5,
+              },
+            ]}
+            disabled={loading}
+            activeOpacity={0.6}
+            onPress={sauvegarder}
           >
 
             <Text
               style={
-                recetteFormulaireStyle.boutonAjouterTexte
+                recetteFormulaireStyle.boutonSauvegarderText
               }
             >
-              + Ajouter une étape
+              Enregistrer la RE7
             </Text>
 
           </TouchableOpacity>
 
-        </View>
-
-
-        {/* SAUVEGARDE */}
-        <TouchableOpacity
-          style={[
-            recetteFormulaireStyle.boutonSauvegarder,
-            loading && {
-              opacity: 0.5,
-            },
-          ]}
-          disabled={loading}
-          activeOpacity={0.6}
-          onPress={sauvegarder}
-        >
-
-          <Text
-            style={
-              recetteFormulaireStyle.boutonSauvegarderText
-            }
-          >
-            Enregistrer la RE7
-          </Text>
-
-        </TouchableOpacity>
-
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
 
       {/* MODAL INGREDIENTS */}
@@ -722,6 +803,22 @@ const RecetteFormulaire = ({ navigation, route }) => {
         }
         onSelect={addIngredients}
         selectedIngredients={ingredients}
+      />
+
+      <UniteModal
+        visible={uniteModalVisible}
+        onClose={() => setUniteModalVisible(false)}
+        onSelect={(unite) => {
+
+          modifierIngredient(
+            ingredientUniteIndex,
+            'unite',
+            unite
+          );
+
+          setUniteModalVisible(false);
+
+        }}
       />
 
 
