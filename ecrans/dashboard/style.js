@@ -137,6 +137,13 @@ const dashBoardStyles = StyleSheet.create({
     color: '#888',
     fontSize: 14,
   },
+  sectionDescription: {
+    paddingHorizontal: PADDING.horizontal,
+    color: '#777',
+    fontSize: 14,
+    marginTop: 5,
+    marginBottom: 3,
+  },
 
 });
 

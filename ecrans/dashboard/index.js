@@ -6,6 +6,10 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
+import {
+  getSectionDuJour,
+  filtrerRecettesPourSection,
+} from '../../outils/dashboardSectionHelper';
 
 import { useEffect, useState } from 'react';
 
@@ -24,13 +28,23 @@ import { mapRecetteForNavigation } from '../../outils/recetteMapper';
 const Dashboard = ({ navigation }) => {
 
   const [randomQuote] = useState(
-  () => FakeQuotes[Math.floor(Math.random() * FakeQuotes.length)]
-);
+    () => FakeQuotes[Math.floor(Math.random() * FakeQuotes.length)]
+  );
 
   const [recettes, setRecettes] = useState([]);
+
+  const [sectionDuJour, setSectionDuJour] = useState(null);
+  const [recettesSection, setRecettesSection] = useState([]);
+
   const [toutesLesRecettes, setToutesLesRecettes] = useState([]);
   const [recetteDuMoment, setRecetteDuMoment] = useState(null);
 
+  // Récupération de la section à afficher
+  useEffect(() => {
+    const section = getSectionDuJour();
+
+    setSectionDuJour(section);
+  }, []);
 
   // Récupération des dernières recettes
   useEffect(() => {
@@ -53,6 +67,13 @@ const Dashboard = ({ navigation }) => {
         });
 
         setRecettes(data);
+
+        const section = getSectionDuJour();
+
+        setSectionDuJour(section);
+        setRecettesSection(
+          filtrerRecettesPourSection(data, section)
+        );
 
       });
 
@@ -256,6 +277,43 @@ const Dashboard = ({ navigation }) => {
         )}
 
       </View>
+
+      {/* Section du moment */}
+      {sectionDuJour && (
+        <View>
+
+          <Text style={dashBoardStyles.titre}>
+            {sectionDuJour.titre}
+          </Text>
+
+          <Text style={dashBoardStyles.sectionDescription}>
+            {sectionDuJour.description}
+          </Text>
+
+          {recettesSection.length === 0 ? (
+
+            <Text style={dashBoardStyles.emptyText}>
+              Aucune recette pour cette sélection 👨‍🍳
+            </Text>
+
+          ) : (
+
+            <FlatList
+              data={recettesSection}
+              keyExtractor={item => item.id}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={dashBoardStyles.horizontalFlatList}
+              renderItem={({ item }) => (
+                <DerniereRecetteComposant item={item} />
+              )}
+            />
+
+          )}
+
+        </View>
+      )}
+      {/* Fin section du moment */}
 
 
       {/* CITATION */}
