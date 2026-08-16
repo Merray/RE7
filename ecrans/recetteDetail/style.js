@@ -2,96 +2,66 @@ import { StyleSheet } from 'react-native';
 import { COULEURS, TEXT_SIZE, PADDING } from '../../outils/constantes';
 
 export default StyleSheet.create({
-    container: { flex: 1, backgroundColor: COULEURS.main },
-    image: { width: '100%', height: 200 },
-    infoContainer: { backgroundColor: '#f2f2f2', padding: PADDING.horizontal },
-    title: { fontSize: TEXT_SIZE.title, fontWeight: 'bold', marginVertical: 5 },
-    sub: { fontSize: TEXT_SIZE.secondary, color: '#666' },
-    info: { fontSize: 14, color: '#444', marginVertical: 5 },
 
-    tabContainer: { flexDirection: 'row', justifyContent: 'center', marginVertical: 10 },
-    tab: { paddingVertical: 10, paddingHorizontal: 20, borderBottomWidth: 2, borderBottomColor: 'transparent' },
-    activeTab: { borderBottomColor: COULEURS.secondary },
-    tabText: { fontSize: 16, fontWeight: '600' },
+    // =========================
+    // CONTENEUR PRINCIPAL
+    // =========================
 
-    dynamicContainer: {
+    container: {
         flex: 1,
-        backgroundColor: COULEURS.secondary,
-        padding: PADDING.horizontal,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        backgroundColor: COULEURS.main,
     },
 
-    ingredientsList: { flexDirection: 'row', flexWrap: 'wrap', marginVertical: 10 },
-    ingredientBadge: {
-        color: '#fff',
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        borderRadius: 14,
-        margin: 4,
-        fontSize: 14,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        minWidth: 70,
+    // =========================
+    // IMAGE
+    // =========================
+
+    image: {
+        width: '100%',
+        height: 200,
     },
 
+    // =========================
+    // INFORMATIONS RECETTE
+    // =========================
 
-    preparationList: { marginVertical: 10 },
-    bullet: { fontSize: 16, marginRight: 6, lineHeight: 20 },
-    preparationText: { fontSize: 20, color: '#fff', lineHeight: 22, flexShrink: 1 },
-    stepNumber: {
-        fontWeight: 'bold',
-        color: COULEURS.noir,
-        marginRight: 8,
-        fontSize: TEXT_SIZE.secondary,
-        width: 70, // pour que le texte soit aligné
-    },
-    preparationStep: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginBottom: 8
-    },
-    preparationText: {
-        color: COULEURS.noir,
-        fontSize: 20,
-        lineHeight: 22,
-        flexShrink: 1
-    },
-    createurContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    infoContainer: {
         backgroundColor: '#f2f2f2',
-        paddingHorizontal: PADDING.horizontal,
-        paddingVertical: 10,
+        padding: PADDING.horizontal,
     },
 
-    createurPhoto: {
-        width: 45,
-        height: 45,
-        borderRadius: 23,
-        borderWidth: 2,
-        borderColor: COULEURS.main,
-    },
-
-    createurInfos: {
-        marginLeft: 10,
-    },
-
-    createurLabel: {
-        fontSize: 13,
-        color: '#777',
-    },
-
-    createurPseudo: {
-        fontSize: TEXT_SIZE.secondary,
+    title: {
+        fontSize: TEXT_SIZE.title,
         fontWeight: 'bold',
-        color: COULEURS.main,
+        marginVertical: 5,
     },
+
+    sub: {
+        fontSize: TEXT_SIZE.secondary,
+        color: '#666',
+    },
+
+    info: {
+        fontSize: 14,
+        color: '#444',
+        marginVertical: 5,
+    },
+
+    // =========================
+    // CRÉATEUR
+    // =========================
+
     createurContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 20,
         marginBottom: 10,
+    },
+
+    createurProfil: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
     },
 
     createurPhoto: {
@@ -116,11 +86,10 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: COULEURS.secondary,
     },
-    createurProfil: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-    },
+
+    // =========================
+    // BOUTONS ACTIONS
+    // =========================
 
     actionsContainer: {
         flexDirection: 'row',
@@ -145,4 +114,147 @@ export default StyleSheet.create({
     actionButtonText: {
         fontSize: 19,
     },
+
+    // =========================
+    // ONGLETS
+    // =========================
+
+    tabContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginVertical: 10,
+    },
+
+    tab: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderBottomWidth: 2,
+        borderBottomColor: 'transparent',
+    },
+
+    activeTab: {
+        borderBottomColor: COULEURS.secondary,
+    },
+
+    tabText: {
+        fontSize: 16,
+        fontWeight: '600',
+    },
+
+    // =========================
+    // CONTENU DYNAMIQUE
+    // =========================
+
+    dynamicContainer: {
+        flex: 1,
+        backgroundColor: COULEURS.secondary,
+        padding: PADDING.horizontal,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
+
+    scrollContent: {
+        paddingTop: 10,
+
+        // Espace supplémentaire pour éviter
+        // que la barre Android cache le contenu
+        paddingBottom: 50,
+    },
+
+    // =========================
+    // INGRÉDIENTS
+    // =========================
+
+    ingredientsList: {
+        marginVertical: 10,
+    },
+
+    ingredientRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COULEURS.blanc,
+        borderRadius: 10,
+        marginBottom: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+    },
+
+    quantiteBadge: {
+        minWidth: 75,
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        borderRadius: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 12,
+    },
+
+    quantiteText: {
+        color: COULEURS.blanc,
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+
+    ingredientName: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: '600',
+        color: COULEURS.noir,
+    },
+
+    // =========================
+    // PRÉPARATION
+    // =========================
+
+    preparationList: {
+        marginVertical: 10,
+    },
+
+    preparationStep: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+
+        backgroundColor: COULEURS.blanc,
+
+        borderRadius: 12,
+
+        paddingVertical: 14,
+        paddingHorizontal: 12,
+
+        marginBottom: 12,
+
+        elevation: 2,
+    },
+
+    stepBadge: {
+        width: 34,
+        height: 34,
+
+        borderRadius: 17,
+
+        backgroundColor: COULEURS.main,
+
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        marginRight: 12,
+
+        flexShrink: 0,
+    },
+
+    stepNumber: {
+        color: COULEURS.blanc,
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+
+    preparationText: {
+        flex: 1,
+
+        color: COULEURS.noir,
+
+        fontSize: 18,
+        lineHeight: 25,
+    },
+
 });

@@ -260,24 +260,45 @@ const RecetteDetail = ({ route, navigation }) => {
       {/* Contenu dynamique */}
       <View style={styles.dynamicContainer}>
 
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
 
           {activeTab === 'ingredients' ? (
 
             <View style={styles.ingredientsList}>
 
               {recette.ingredients.map((ing, i) => (
-                <Text
+
+                <View
                   key={i}
-                  style={[
-                    styles.ingredientBadge,
-                    {
-                      backgroundColor: getIngredientColor(ing)
-                    }
-                  ]}
+                  style={styles.ingredientRow}
                 >
-                  {ing.label}
-                </Text>
+
+                  {/* Quantité */}
+                  {ing.quantite ? (
+                    <View
+                      style={[
+                        styles.quantiteBadge,
+                        {
+                          backgroundColor: getIngredientColor(ing),
+                        },
+                      ]}
+                    >
+                      <Text style={styles.quantiteText}>
+                        {ing.quantite} {ing.unite || ''}
+                      </Text>
+                    </View>
+                  ) : null}
+
+                  {/* Nom */}
+                  <Text style={styles.ingredientName}>
+                    {ing.label}
+                  </Text>
+
+                </View>
+
               ))}
 
             </View>
@@ -287,20 +308,26 @@ const RecetteDetail = ({ route, navigation }) => {
             <View style={styles.preparationList}>
 
               {recette.preparation.map((step, i) => (
+
                 <View
                   key={i}
                   style={styles.preparationStep}
                 >
 
-                  <Text style={styles.stepNumber}>
-                    Étape {i + 1} :
-                  </Text>
+                  {/* Numéro de l'étape */}
+                  <View style={styles.stepBadge}>
+                    <Text style={styles.stepNumber}>
+                      {i + 1}
+                    </Text>
+                  </View>
 
+                  {/* Texte */}
                   <Text style={styles.preparationText}>
                     {step}
                   </Text>
 
                 </View>
+
               ))}
 
             </View>
