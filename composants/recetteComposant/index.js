@@ -9,12 +9,18 @@ const getIngredientColor = (ingredient) => {
 };
 
 const RecetteComposant = ({ item, navigation }) => {
+
+  const ingredients = item.ingredients || [];
+
+  const ingredientsVisibles = ingredients.slice(0, 3);
+  const nombreIngredientsRestants = ingredients.length - 3;
+
   return (
     <TouchableOpacity
       style={recetteStyle.container}
       onPress={() =>
         navigation.navigate('recetteDetail', {
-          recette: mapRecetteForNavigation(item)
+          recette: mapRecetteForNavigation(item),
         })
       }
     >
@@ -28,13 +34,19 @@ const RecetteComposant = ({ item, navigation }) => {
       <View style={recetteStyle.description}>
 
         {/* Nom */}
-        <Text style={recetteStyle.titre}>
+        <Text
+          style={recetteStyle.titre}
+          numberOfLines={2}
+          ellipsizeMode="tail"
+        >
           {item.nom}
         </Text>
 
-        {/* Badges ingrédients */}
+        {/* Ingrédients principaux */}
         <View style={recetteStyle.ingredientsContainer}>
-          {item.ingredients.map((ingredient, index) => (
+
+          {ingredientsVisibles.map((ingredient, index) => (
+
             <Text
               key={index}
               style={[
@@ -46,7 +58,17 @@ const RecetteComposant = ({ item, navigation }) => {
             >
               {ingredient.label}
             </Text>
+
           ))}
+
+          {nombreIngredientsRestants > 0 && (
+
+            <Text style={recetteStyle.moreIngredients}>
+              + {nombreIngredientsRestants} autres
+            </Text>
+
+          )}
+
         </View>
 
       </View>
