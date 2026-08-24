@@ -108,6 +108,16 @@ const RecetteDetail = ({ route, navigation }) => {
         .doc(recette.id)
         .delete();
 
+      // Décrémente le nombre de recettes
+      // du créateur
+      await firestore()
+        .collection('users')
+        .doc(recette.createdByUid)
+        .update({
+          nombreRecettes:
+            firestore.FieldValue.increment(-1),
+        });
+
       console.log('Recette supprimée');
 
       Alert.alert(

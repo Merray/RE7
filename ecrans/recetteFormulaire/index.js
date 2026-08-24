@@ -387,6 +387,14 @@ const RecetteFormulaire = ({ navigation, route }) => {
             createdByUid: utilisateur.uid,
           });
 
+        await firestore()
+          .collection('users')
+          .doc(utilisateur.uid)
+          .update({
+            nombreRecettes:
+              firestore.FieldValue.increment(1),
+          });
+
       }
 
 
