@@ -8,6 +8,8 @@ import {
   Alert,
 } from 'react-native';
 
+import LoadingOverlay from '../../composants/loadingOverlay';
+
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
@@ -18,7 +20,7 @@ import styles from './style';
 const RecetteDetail = ({ route, navigation }) => {
 
   const { recette } = route.params;
-
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('ingredients');
   const [createur, setCreateur] = useState(null);
   const utilisateur = auth().currentUser;
@@ -94,8 +96,13 @@ const RecetteDetail = ({ route, navigation }) => {
 
   const supprimerRecetteConfirmee = async () => {
 
+    if (loading) {
+      return;
+    }
+
     try {
 
+      setLoading(true);
       // Suppression de l'image dans Firebase Storage
       if (recette.image) {
         const imageReference = storage().refFromURL(recette.image);
@@ -118,7 +125,7 @@ const RecetteDetail = ({ route, navigation }) => {
             firestore.FieldValue.increment(-1),
         });
 
-      console.log('Recette supprimée');
+      setLoading(false);
 
       Alert.alert(
         '🗑️ Recette supprimée',
@@ -136,6 +143,8 @@ const RecetteDetail = ({ route, navigation }) => {
     } catch (error) {
 
       console.error('Erreur suppression recette :', error);
+
+      setLoading(false);
 
       Alert.alert(
         'Erreur ❌',
@@ -347,6 +356,11 @@ const RecetteDetail = ({ route, navigation }) => {
         </ScrollView>
 
       </View>
+
+      <LoadingOverlay
+        visible={loading}
+        message="Suppression de la recette..."
+      />
 
     </View>
   );

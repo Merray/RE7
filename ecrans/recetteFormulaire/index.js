@@ -17,7 +17,6 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 
 import { launchImageLibrary } from 'react-native-image-picker';
-import { ActivityIndicator } from 'react-native-paper';
 
 import TitreInput from '../../composants/titreInput';
 import IngredientModal from '../../composants/ingredientModal';
@@ -29,6 +28,8 @@ import {
 } from '../../outils/constantes';
 
 import recetteFormulaireStyle from './style';
+
+import LoadingOverlay from '../../composants/loadingOverlay';
 
 
 const RecetteFormulaire = ({ navigation, route }) => {
@@ -831,30 +832,10 @@ const RecetteFormulaire = ({ navigation, route }) => {
 
 
       {/* LOADING */}
-      {loading && (
-
-        <View
-          style={
-            recetteFormulaireStyle.loadingOverlay
-          }
-        >
-
-          <ActivityIndicator
-            size="large"
-            color={COULEURS.blanc}
-          />
-
-          <Text
-            style={
-              recetteFormulaireStyle.loadingText
-            }
-          >
-            Enregistrement en cours...
-          </Text>
-
-        </View>
-
-      )}
+      <LoadingOverlay
+        visible={loading}
+        message="Enregistrement en cours..."
+      />
 
     </>
   );
