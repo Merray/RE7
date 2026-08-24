@@ -8,9 +8,11 @@ import {
   ScrollView,
   Image,
   Alert,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
+
+import {
+  KeyboardAwareScrollView,
+} from 'react-native-keyboard-aware-scroll-view';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -443,369 +445,369 @@ const RecetteFormulaire = ({ navigation, route }) => {
 
   return (
     <>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView
+      <KeyboardAwareScrollView
+        style={{
+          flex: 1,
+          backgroundColor: COULEURS.secondary,
+        }}
+        contentContainerStyle={{
+          padding: 15,
+          paddingBottom: 150,
+        }}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        enableOnAndroid={true}
+        enableAutomaticScroll={true}
+        extraHeight={150}
+        extraScrollHeight={50}
+      >
+
+        {/* Image cuisine */}
+        <Image
+          source={require('../../assets/image_cuisine.jpg')}
           style={{
-            flex: 1,
-            backgroundColor: COULEURS.secondary,
+            width: '100%',
+            height: 180,
+            borderRadius: 15,
+            marginBottom: 15,
           }}
-          contentContainerStyle={{
-            padding: 15,
-            paddingBottom: 100,
-          }}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-        >
+        />
 
-          {/* Image cuisine */}
-          <Image
-            source={require('../../assets/image_cuisine.jpg')}
+
+        {/* PHOTO */}
+        <View style={recetteFormulaireStyle.card}>
+
+          <Text
+            style={recetteFormulaireStyle.sectionTitle}
+          >
+            📸 Photo de la recette
+          </Text>
+
+          <TouchableOpacity
+            onPress={choisirImage}
+            style={recetteFormulaireStyle.imagePicker}
+          >
+
+            {image ? (
+
+              <Image
+                source={{ uri: image }}
+                style={recetteFormulaireStyle.imagePreview}
+              />
+
+            ) : (
+
+              <Text style={{ color: '#888' }}>
+                Ajouter une photo
+              </Text>
+
+            )}
+
+          </TouchableOpacity>
+
+        </View>
+
+
+        {/* NOM */}
+        <TitreInput
+          titre="Nom de la recette"
+          placeholder="Ex: Poulet croustillant"
+          value={nom}
+          onChangeText={setNom}
+        />
+
+
+        {/* DESCRIPTION */}
+        <TitreInput
+          titre="Description"
+          placeholder="Décris ta recette..."
+          value={description}
+          onChangeText={setDescription}
+        />
+
+
+        {/* INGREDIENTS */}
+        <View style={recetteFormulaireStyle.card}>
+
+          <Text
+            style={recetteFormulaireStyle.sectionTitle}
+          >
+            🥕 Ingrédients 🥕
+          </Text>
+
+
+          {/* Badges */}
+          <View
             style={{
-              width: '100%',
-              height: 180,
-              borderRadius: 15,
-              marginBottom: 15,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
             }}
-          />
+          >
 
+            {ingredients.map((ingredient, index) => (
 
-          {/* PHOTO */}
-          <View style={recetteFormulaireStyle.card}>
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  removeIngredient(index)
+                }
+                style={{
+                  backgroundColor:
+                    CATEGORY_COLORS[
+                    ingredient.category
+                    ],
 
-            <Text
-              style={recetteFormulaireStyle.sectionTitle}
-            >
-              📸 Photo de la recette
-            </Text>
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
 
-            <TouchableOpacity
-              onPress={choisirImage}
-              style={recetteFormulaireStyle.imagePicker}
-            >
+                  borderRadius: 15,
+                  margin: 5,
+                }}
+              >
 
-              {image ? (
-
-                <Image
-                  source={{ uri: image }}
-                  style={recetteFormulaireStyle.imagePreview}
-                />
-
-              ) : (
-
-                <Text style={{ color: '#888' }}>
-                  Ajouter une photo
+                <Text style={{ color: 'white' }}>
+                  {ingredient.label} ✕
                 </Text>
 
-              )}
+              </TouchableOpacity>
 
-            </TouchableOpacity>
+            ))}
 
           </View>
 
 
-          {/* NOM */}
-          <TitreInput
-            titre="Nom de la recette"
-            placeholder="Ex: Poulet croustillant"
-            value={nom}
-            onChangeText={setNom}
-          />
-
-
-          {/* DESCRIPTION */}
-          <TitreInput
-            titre="Description"
-            placeholder="Décris ta recette..."
-            value={description}
-            onChangeText={setDescription}
-          />
-
-
-          {/* INGREDIENTS */}
-          <View style={recetteFormulaireStyle.card}>
+          {/* Ajouter des ingrédients */}
+          <TouchableOpacity
+            style={recetteFormulaireStyle.boutonAjouter}
+            onPress={() =>
+              setModalVisible(true)
+            }
+          >
 
             <Text
-              style={recetteFormulaireStyle.sectionTitle}
-            >
-              🥕 Ingrédients 🥕
-            </Text>
-
-
-            {/* Badges */}
-            <View
-              style={{
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-              }}
-            >
-
-              {ingredients.map((ingredient, index) => (
-
-                <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                    removeIngredient(index)
-                  }
-                  style={{
-                    backgroundColor:
-                      CATEGORY_COLORS[
-                      ingredient.category
-                      ],
-
-                    paddingVertical: 6,
-                    paddingHorizontal: 10,
-
-                    borderRadius: 15,
-                    margin: 5,
-                  }}
-                >
-
-                  <Text style={{ color: 'white' }}>
-                    {ingredient.label} ✕
-                  </Text>
-
-                </TouchableOpacity>
-
-              ))}
-
-            </View>
-
-
-            {/* Ajouter des ingrédients */}
-            <TouchableOpacity
-              style={recetteFormulaireStyle.boutonAjouter}
-              onPress={() =>
-                setModalVisible(true)
+              style={
+                recetteFormulaireStyle.boutonAjouterTexte
               }
             >
-
-              <Text
-                style={
-                  recetteFormulaireStyle.boutonAjouterTexte
-                }
-              >
-                + Ajouter des ingrédients
-              </Text>
-
-            </TouchableOpacity>
-
-          </View>
-
-          {/* QUANTITÉS */}
-          {ingredients.length > 0 && (
-            <View style={recetteFormulaireStyle.card}>
-
-              <Text style={recetteFormulaireStyle.sectionTitle}>
-                📏 Quantités
-              </Text>
-
-              {ingredients.map((ingredient, index) => (
-
-                <View
-                  key={ingredient.label}
-                  style={recetteFormulaireStyle.quantiteRow}
-                >
-
-                  {/* Nom de l'ingrédient */}
-                  <Text style={recetteFormulaireStyle.quantiteIngredient}>
-                    {ingredient.label}
-                  </Text>
-
-                  {/* Quantité */}
-                  <TextInput
-                    value={ingredient.quantite}
-                    onChangeText={(value) =>
-                      modifierIngredient(index, 'quantite', value)
-                    }
-                    placeholder="0"
-                    keyboardType="numeric"
-                    style={recetteFormulaireStyle.quantiteInput}
-                  />
-
-                  {/* Unité */}
-                  <TouchableOpacity
-                    style={recetteFormulaireStyle.uniteButton}
-                    onPress={() => {
-                      setIngredientUniteIndex(index);
-                      setUniteModalVisible(true);
-                    }}
-                  >
-                    <Text style={recetteFormulaireStyle.uniteButtonText}>
-                      {ingredient.unite}
-                    </Text>
-
-                    <Text style={recetteFormulaireStyle.uniteArrow}>
-                      ▼
-                    </Text>
-                  </TouchableOpacity>
-
-                </View>
-
-              ))}
-
-            </View>
-          )}
-
-          {/* PREPARATION */}
-          <View style={recetteFormulaireStyle.card}>
-
-            <Text
-              style={recetteFormulaireStyle.sectionTitle}
-            >
-              👨‍🍳 Préparation 👨‍🍳
+              + Ajouter des ingrédients
             </Text>
 
+          </TouchableOpacity>
 
-            {preparation.length === 1 &&
-              preparation[0] === '' && (
+        </View>
 
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#999',
-                    marginTop: 10,
-                  }}
-                >
-                  👇 Ajoute les étapes de préparation 👇
-                </Text>
+        {/* QUANTITÉS */}
+        {ingredients.length > 0 && (
+          <View style={recetteFormulaireStyle.card}>
 
-              )}
+            <Text style={recetteFormulaireStyle.sectionTitle}>
+              📏 Quantités
+            </Text>
 
-
-            {preparation.map((step, index) => (
+            {ingredients.map((ingredient, index) => (
 
               <View
-                key={index}
-                style={
-                  recetteFormulaireStyle.inputRow
-                }
+                key={ingredient.label}
+                style={recetteFormulaireStyle.quantiteRow}
               >
 
-                <View
-                  style={
-                    recetteFormulaireStyle.stepBadge
-                  }
-                >
+                {/* Nom de l'ingrédient */}
+                <Text style={recetteFormulaireStyle.quantiteIngredient}>
+                  {ingredient.label}
+                </Text>
 
-                  <Text
-                    style={
-                      recetteFormulaireStyle.stepText
-                    }
-                  >
-                    {index + 1}
-                  </Text>
-
-                </View>
-
-
+                {/* Quantité */}
                 <TextInput
-                  placeholder={`Étape ${index + 1}`}
-                  value={step}
-                  onChangeText={text =>
-                    updateField(
-                      setPreparation,
-                      preparation,
-                      text,
-                      index
-                    )
+                  value={ingredient.quantite}
+                  onChangeText={(value) =>
+                    modifierIngredient(index, 'quantite', value)
                   }
-                  style={[
-                    recetteFormulaireStyle.container,
-                    {
-                      flex: 1,
-                    },
-                  ]}
+                  placeholder="0"
+                  keyboardType="numeric"
+                  style={recetteFormulaireStyle.quantiteInput}
                 />
 
+                {/* Unité */}
+                <TouchableOpacity
+                  style={recetteFormulaireStyle.uniteButton}
+                  onPress={() => {
+                    setIngredientUniteIndex(index);
+                    setUniteModalVisible(true);
+                  }}
+                >
+                  <Text style={recetteFormulaireStyle.uniteButtonText}>
+                    {ingredient.unite}
+                  </Text>
 
-                {preparation.length > 1 && (
-
-                  <TouchableOpacity
-                    onPress={() =>
-                      removeField(
-                        setPreparation,
-                        preparation,
-                        index
-                      )
-                    }
-                    style={
-                      recetteFormulaireStyle.deleteButton
-                    }
-                  >
-
-                    <Text
-                      style={
-                        recetteFormulaireStyle.deleteText
-                      }
-                    >
-                      ✕
-                    </Text>
-
-                  </TouchableOpacity>
-
-                )}
+                  <Text style={recetteFormulaireStyle.uniteArrow}>
+                    ▼
+                  </Text>
+                </TouchableOpacity>
 
               </View>
 
             ))}
 
+          </View>
+        )}
 
-            <TouchableOpacity
+        {/* PREPARATION */}
+        <View style={recetteFormulaireStyle.card}>
+
+          <Text
+            style={recetteFormulaireStyle.sectionTitle}
+          >
+            👨‍🍳 Préparation 👨‍🍳
+          </Text>
+
+
+          {preparation.length === 1 &&
+            preparation[0] === '' && (
+
+              <Text
+                style={{
+                  textAlign: 'center',
+                  color: '#999',
+                  marginTop: 10,
+                }}
+              >
+                👇 Ajoute les étapes de préparation 👇
+              </Text>
+
+            )}
+
+
+          {preparation.map((step, index) => (
+
+            <View
+              key={index}
               style={
-                recetteFormulaireStyle.boutonAjouter
-              }
-              onPress={() =>
-                addField(
-                  setPreparation,
-                  preparation
-                )
+                recetteFormulaireStyle.inputRow
               }
             >
 
-              <Text
+              <View
                 style={
-                  recetteFormulaireStyle.boutonAjouterTexte
+                  recetteFormulaireStyle.stepBadge
                 }
               >
-                + Ajouter une étape
-              </Text>
 
-            </TouchableOpacity>
+                <Text
+                  style={
+                    recetteFormulaireStyle.stepText
+                  }
+                >
+                  {index + 1}
+                </Text>
 
-          </View>
+              </View>
 
 
-          {/* SAUVEGARDE */}
+              <TextInput
+                placeholder={`Étape ${index + 1}`}
+                value={step}
+                onChangeText={text =>
+                  updateField(
+                    setPreparation,
+                    preparation,
+                    text,
+                    index
+                  )
+                }
+                style={[
+                  recetteFormulaireStyle.container,
+                  {
+                    flex: 1,
+                  },
+                ]}
+              />
+
+
+              {preparation.length > 1 && (
+
+                <TouchableOpacity
+                  onPress={() =>
+                    removeField(
+                      setPreparation,
+                      preparation,
+                      index
+                    )
+                  }
+                  style={
+                    recetteFormulaireStyle.deleteButton
+                  }
+                >
+
+                  <Text
+                    style={
+                      recetteFormulaireStyle.deleteText
+                    }
+                  >
+                    ✕
+                  </Text>
+
+                </TouchableOpacity>
+
+              )}
+
+            </View>
+
+          ))}
+
+
           <TouchableOpacity
-            style={[
-              recetteFormulaireStyle.boutonSauvegarder,
-              loading && {
-                opacity: 0.5,
-              },
-            ]}
-            disabled={loading}
-            activeOpacity={0.6}
-            onPress={sauvegarder}
+            style={
+              recetteFormulaireStyle.boutonAjouter
+            }
+            onPress={() =>
+              addField(
+                setPreparation,
+                preparation
+              )
+            }
           >
 
             <Text
               style={
-                recetteFormulaireStyle.boutonSauvegarderText
+                recetteFormulaireStyle.boutonAjouterTexte
               }
             >
-              Enregistrer la RE7
+              + Ajouter une étape
             </Text>
 
           </TouchableOpacity>
 
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+
+
+        {/* SAUVEGARDE */}
+        <TouchableOpacity
+          style={[
+            recetteFormulaireStyle.boutonSauvegarder,
+            loading && {
+              opacity: 0.5,
+            },
+          ]}
+          disabled={loading}
+          activeOpacity={0.6}
+          onPress={sauvegarder}
+        >
+
+          <Text
+            style={
+              recetteFormulaireStyle.boutonSauvegarderText
+            }
+          >
+            Enregistrer la RE7
+          </Text>
+
+        </TouchableOpacity>
+
+      </KeyboardAwareScrollView>
 
 
       {/* MODAL INGREDIENTS */}
-      <IngredientModal
+      < IngredientModal
         visible={modalVisible}
         onClose={() =>
           setModalVisible(false)
