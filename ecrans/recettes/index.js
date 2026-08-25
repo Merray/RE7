@@ -33,11 +33,30 @@ const Recettes = ({ navigation }) => {
     return () => unsubscribe();
   }, []);
 
-  const recettesFiltrees = recettes.filter(recette =>
-    recette.nom
-      ?.toLowerCase()
-      .includes(recherche.toLowerCase())
-  );
+  const recettesFiltrees = recettes.filter(recette => {
+
+    const rechercheNormalisee =
+      recherche.toLowerCase();
+
+    // Recherche dans le nom de la recette
+    const nomCorrespond =
+      recette.nom
+        ?.toLowerCase()
+        .includes(rechercheNormalisee);
+
+    // Recherche dans les ingrédients
+    const ingredientCorrespond =
+      recette.ingredients?.some(ingredient =>
+        ingredient.label
+          ?.toLowerCase()
+          .includes(rechercheNormalisee)
+      );
+
+    // La recette est conservée si le nom OU
+    // au moins un ingrédient correspond
+    return nomCorrespond || ingredientCorrespond;
+
+  });
 
   return (
     <View style={{ flex: 1, backgroundColor: COULEURS.secondary }}>
