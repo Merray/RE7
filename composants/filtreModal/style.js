@@ -56,6 +56,61 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 12,
+        color: '#333',
+    },
+
+    filterOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+
+        width: 270,
+
+        paddingVertical: 15,
+        paddingHorizontal: 25,
+
+        borderWidth: 1,
+        borderColor: '#DDD',
+        borderRadius: 20,
+
+        marginBottom: 15,
+    },
+
+    filterOptionActive: {
+        borderColor: '#05a565',
+        backgroundColor: '#F0FFF7',
+    },
+
+    filterOptionText: {
+        fontSize: 16,
+        color: '#333',
+    },
+
+    checkbox: {
+        width: 32,
+        height: 32,
+
+        borderRadius: 16,
+        borderWidth: 2,
+        borderColor: '#BBB',
+
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    checkboxActive: {
+        backgroundColor: '#05a565',
+        borderColor: '#05a565',
+    },
+    checkmark: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
 
 });
 

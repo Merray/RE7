@@ -15,6 +15,8 @@ const Recettes = ({ navigation }) => {
 
   const [filtreModalVisible, setFiltreModalVisible] =
     useState(false);
+  const [filtreVegetarien, setFiltreVegetarien] =
+    useState(false);
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -140,6 +142,8 @@ const Recettes = ({ navigation }) => {
       <FiltreModal
         visible={filtreModalVisible}
         onClose={() => setFiltreModalVisible(false)}
+        filtreVegetarien={filtreVegetarien}
+        setFiltreVegetarien={setFiltreVegetarien}
       />
 
     </View>

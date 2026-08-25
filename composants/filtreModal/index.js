@@ -13,6 +13,8 @@ import styles from './style';
 const FiltreModal = ({
     visible,
     onClose,
+    filtreVegetarien,
+    setFiltreVegetarien,
 }) => {
 
     return (
@@ -37,9 +39,39 @@ const FiltreModal = ({
                     {/* CONTENU */}
                     <View style={styles.content}>
 
-                        <Text style={styles.emptyText}>
-                            Les filtres arriveront bientôt 👨‍🍳
+                        {/* TYPE DE RECETTE */}
+                        <Text style={styles.sectionTitle}>
+                            Type de recette
                         </Text>
+
+                        <TouchableOpacity
+                            style={[
+                                styles.filterOption,
+                                filtreVegetarien && styles.filterOptionActive,
+                            ]}
+                            onPress={() =>
+                                setFiltreVegetarien(!filtreVegetarien)
+                            }
+                        >
+
+                            <Text style={styles.filterOptionText}>
+                                🌱 Végétarien
+                            </Text>
+
+                            <View
+                                style={[
+                                    styles.checkbox,
+                                    filtreVegetarien && styles.checkboxActive,
+                                ]}
+                            >
+                                {filtreVegetarien && (
+                                    <Text style={styles.checkmark}>
+                                        ✓
+                                    </Text>
+                                )}
+                            </View>
+
+                        </TouchableOpacity>
 
                     </View>
 
