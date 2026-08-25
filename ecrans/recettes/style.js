@@ -20,6 +20,7 @@ const recetteStyle = StyleSheet.create({
     elevation: 8,
   },
   searchContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
 
@@ -42,6 +43,27 @@ const recetteStyle = StyleSheet.create({
 
     fontSize: 16,
     color: '#333',
+  },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: PADDING.horizontal,
+    marginVertical: 10,
+  },
+
+  filterButton: {
+    width: 50,
+    height: 50,
+
+    marginLeft: 10,
+
+    backgroundColor: '#FFFFFF',
+    borderRadius: 25,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    elevation: 3,
   },
 })
 

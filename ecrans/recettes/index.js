@@ -4,6 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import recetteStyle from './style';
 import RecetteComposant from '../../composants/recetteComposant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FiltreModal from '../../composants/filtreModal';
 import { COULEURS } from '../../outils/constantes';
 
 const Recettes = ({ navigation }) => {
@@ -11,6 +12,9 @@ const Recettes = ({ navigation }) => {
   const [recettes, setRecettes] = useState([]);
 
   const [recherche, setRecherche] = useState('');
+
+  const [filtreModalVisible, setFiltreModalVisible] =
+    useState(false);
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -61,35 +65,53 @@ const Recettes = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: COULEURS.secondary }}>
 
-      <View style={recetteStyle.searchContainer}>
+      <View style={recetteStyle.searchRow}>
 
-        <MaterialCommunityIcons
-          name="magnify"
-          size={24}
-          color="#777"
-        />
+        {/* BARRE DE RECHERCHE */}
+        <View style={recetteStyle.searchContainer}>
 
-        <TextInput
-          style={recetteStyle.searchInput}
-          placeholder="Rechercher une recette..."
-          value={recherche}
-          onChangeText={setRecherche}
-          placeholderTextColor="#999"
-        />
+          <MaterialCommunityIcons
+            name="magnify"
+            size={24}
+            color="#777"
+          />
 
-        {recherche.length > 0 && (
-          <TouchableOpacity
-            onPress={() => setRecherche('')}
-          >
-            <MaterialCommunityIcons
-              name="close-circle"
-              size={22}
-              color="#777"
-            />
-          </TouchableOpacity>
-        )}
+          <TextInput
+            style={recetteStyle.searchInput}
+            placeholder="Rechercher une recette"
+            value={recherche}
+            onChangeText={setRecherche}
+            placeholderTextColor="#999"
+          />
+
+          {recherche.length > 0 && (
+            <TouchableOpacity
+              onPress={() => setRecherche('')}
+            >
+              <MaterialCommunityIcons
+                name="close-circle"
+                size={22}
+                color="#777"
+              />
+            </TouchableOpacity>
+          )}
+
+        </View>
+
+        {/* BOUTON FILTRES */}
+        <TouchableOpacity
+          style={recetteStyle.filterButton}
+          onPress={() => setFiltreModalVisible(true)}
+        >
+          <MaterialCommunityIcons
+            name="filter-variant"
+            size={26}
+            color="#777"
+          />
+        </TouchableOpacity>
 
       </View>
+
       <FlatList
         data={recettesFiltrees}
         keyExtractor={item => item.id}
@@ -114,6 +136,11 @@ const Recettes = ({ navigation }) => {
           color="white"
         />
       </TouchableOpacity>
+
+      <FiltreModal
+        visible={filtreModalVisible}
+        onClose={() => setFiltreModalVisible(false)}
+      />
 
     </View>
   );
