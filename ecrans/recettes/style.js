@@ -64,6 +64,30 @@ const recetteStyle = StyleSheet.create({
     alignItems: 'center',
 
     elevation: 3,
+
+    position: 'relative',
+  },
+  filterBadge: {
+    position: 'absolute',
+
+    top: 0,
+    right: 0,
+
+    minWidth: 22,
+    height: 22,
+
+    borderRadius: 11,
+
+    backgroundColor: '#05a565',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  filterBadgeText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 })
 

@@ -18,6 +18,18 @@ const Recettes = ({ navigation }) => {
     useState(false);
   const [filtreVegetarien, setFiltreVegetarien] =
     useState(false);
+  const [filtreVegan, setFiltreVegan] =
+    useState(false);
+
+  const [filtreProtMaxing, setFiltreProtMaxing] =
+    useState(false);
+
+  const nombreFiltresActifs =
+    [
+      filtreVegetarien,
+      filtreVegan,
+      filtreProtMaxing,
+    ].filter(Boolean).length;
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -84,6 +96,25 @@ const Recettes = ({ navigation }) => {
 
     }
 
+    // 🌱 Filtre vegan
+    if (filtreVegan) {
+
+      correspondFiltre =
+        correspondFiltre &&
+        tagsRecette.vegan;
+
+    }
+
+
+    // 💪 Filtre ProtMaxing
+    if (filtreProtMaxing) {
+
+      correspondFiltre =
+        correspondFiltre &&
+        tagsRecette.protMaxing;
+
+    }
+
 
     // La recette doit respecter
     // la recherche ET le filtre
@@ -135,11 +166,25 @@ const Recettes = ({ navigation }) => {
           style={recetteStyle.filterButton}
           onPress={() => setFiltreModalVisible(true)}
         >
+
           <MaterialCommunityIcons
             name="filter-variant"
             size={26}
             color="#777"
           />
+
+          {nombreFiltresActifs > 0 && (
+
+            <View style={recetteStyle.filterBadge}>
+
+              <Text style={recetteStyle.filterBadgeText}>
+                {nombreFiltresActifs}
+              </Text>
+
+            </View>
+
+          )}
+
         </TouchableOpacity>
 
       </View>
@@ -172,8 +217,15 @@ const Recettes = ({ navigation }) => {
       <FiltreModal
         visible={filtreModalVisible}
         onClose={() => setFiltreModalVisible(false)}
+
         filtreVegetarien={filtreVegetarien}
         setFiltreVegetarien={setFiltreVegetarien}
+
+        filtreVegan={filtreVegan}
+        setFiltreVegan={setFiltreVegan}
+
+        filtreProtMaxing={filtreProtMaxing}
+        setFiltreProtMaxing={setFiltreProtMaxing}
       />
 
     </View>
