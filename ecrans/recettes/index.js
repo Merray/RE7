@@ -5,6 +5,7 @@ import recetteStyle from './style';
 import RecetteComposant from '../../composants/recetteComposant';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FiltreModal from '../../composants/filtreModal';
+import analyserTagsRecette from '../../outils/tagsRecette';
 import { COULEURS } from '../../outils/constantes';
 
 const Recettes = ({ navigation }) => {
@@ -44,7 +45,7 @@ const Recettes = ({ navigation }) => {
     const rechercheNormalisee =
       recherche.toLowerCase();
 
-    // Recherche dans le nom de la recette
+    // Recherche dans le nom
     const nomCorrespond =
       recette.nom
         ?.toLowerCase()
@@ -58,9 +59,38 @@ const Recettes = ({ navigation }) => {
           .includes(rechercheNormalisee)
       );
 
-    // La recette est conservée si le nom OU
-    // au moins un ingrédient correspond
-    return nomCorrespond || ingredientCorrespond;
+    // La recherche correspond au nom
+    // OU à au moins un ingrédient
+    const correspondRecherche =
+      nomCorrespond || ingredientCorrespond;
+
+
+    // Par défaut, la recette est acceptée
+    let correspondFiltre = true;
+
+
+    // Analyse automatique des tags
+    const tagsRecette = analyserTagsRecette(
+      recette.ingredients
+    );
+
+
+    // 🥦 Filtre végétarien
+    if (filtreVegetarien) {
+
+      correspondFiltre =
+        correspondFiltre &&
+        tagsRecette.vegetarien;
+
+    }
+
+
+    // La recette doit respecter
+    // la recherche ET le filtre
+    return (
+      correspondRecherche &&
+      correspondFiltre
+    );
 
   });
 
