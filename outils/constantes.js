@@ -30,7 +30,7 @@ export const CATEGORY_COLORS = {
   feculents: '#F1C40F',
   legumes: '#27AE60',
   epices: '#8E44AD',
-  fruits: '#E67E22',
+  fruits: '#ff0000',
   produits_laitiers: '#3498DB',
   patisserie: '#9B59B6',
   fruits_secs: '#8D6E63',

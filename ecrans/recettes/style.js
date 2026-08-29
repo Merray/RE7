@@ -5,7 +5,8 @@ const recetteStyle = StyleSheet.create({
   verticalFLatlist: {
     backgroundColor: COULEURS.secondary,
     paddingHorizontal: PADDING.horizontal,
-    paddingVertical: PADDING.vertical
+    paddingVertical: PADDING.vertical,
+    marginBottom: 5
   },
   boutonAjouter: {
     position: 'absolute',

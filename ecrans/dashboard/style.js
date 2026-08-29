@@ -27,6 +27,7 @@ const dashBoardStyles = StyleSheet.create({
   horizontalFlatList: {
     paddingHorizontal: PADDING.horizontal,
     paddingVertical: PADDING.vertical,
+    marginRight: PADDING.horizontal,
   },
 
 

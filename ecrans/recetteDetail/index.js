@@ -16,6 +16,7 @@ import storage from '@react-native-firebase/storage';
 
 import { CATEGORY_COLORS } from '../../outils/constantes';
 import styles from './style';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RecetteDetail = ({ route, navigation }) => {
 
@@ -155,214 +156,222 @@ const RecetteDetail = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
 
-      {/* Image */}
-      <Image
-        source={{ uri: recette.image }}
-        style={styles.image}
-      />
+    <SafeAreaView
+      style={{ flex: 1 }}>
 
-      {/* Informations recette */}
-      <View style={styles.infoContainer}>
 
-        <Text style={styles.title}>
-          {recette.nom}
-        </Text>
+      <View style={styles.container}>
 
-        <Text style={styles.sub}>
-          {recette.description}
-        </Text>
+        {/* Image */}
+        <Image
+          source={{ uri: recette.image }}
+          style={styles.image}
+        />
 
-        {/* Créateur */}
-        {/* Créateur */}
-        {recette.createdByUid && (
-          <View style={styles.createurContainer}>
+        {/* Informations recette */}
+        <View style={styles.infoContainer}>
 
-            {/* Profil du créateur */}
-            <TouchableOpacity
-              style={styles.createurProfil}
-              activeOpacity={0.7}
-              onPress={() =>
-                navigation.navigate('profilUtilisateur', {
-                  uid: recette.createdByUid,
-                })
-              }
-            >
+          <Text style={styles.title}>
+            {recette.nom}
+          </Text>
 
-              <Image
-                source={
-                  createur?.photoURL
-                    ? { uri: createur.photoURL }
-                    : require('../../assets/avatar_default.png')
+          <Text style={styles.sub}>
+            {recette.description}
+          </Text>
+
+          {/* Créateur */}
+          {/* Créateur */}
+          {recette.createdByUid && (
+            <View style={styles.createurContainer}>
+
+              {/* Profil du créateur */}
+              <TouchableOpacity
+                style={styles.createurProfil}
+                activeOpacity={0.7}
+                onPress={() =>
+                  navigation.navigate('profilUtilisateur', {
+                    uid: recette.createdByUid,
+                  })
                 }
-                style={styles.createurPhoto}
-              />
+              >
 
-              <View style={styles.createurInfos}>
-
-                <Text style={styles.createurLabel}>
-                  Créée par
-                </Text>
-
-                <Text style={styles.createurPseudo}>
-                  {createur?.pseudo || 'Utilisateur'}
-                </Text>
-
-              </View>
-
-            </TouchableOpacity>
-
-            {/* Boutons du créateur */}
-            {estCreateur && (
-              <View style={styles.actionsContainer}>
-
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() =>
-                    navigation.navigate('recetteFormulaire', {
-                      recette,
-                    })
+                <Image
+                  source={
+                    createur?.photoURL
+                      ? { uri: createur.photoURL }
+                      : require('../../assets/avatar_default.png')
                   }
-                >
-                  <Text style={styles.actionButtonText}>
-                    ✏️
+                  style={styles.createurPhoto}
+                />
+
+                <View style={styles.createurInfos}>
+
+                  <Text style={styles.createurLabel}>
+                    Créée par
                   </Text>
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[styles.actionButton, styles.deleteButton]}
-                  onPress={supprimerRecette}
-                >
-                  <Text style={styles.actionButtonText}>
-                    🗑️
-                  </Text>
-                </TouchableOpacity>
-
-              </View>
-            )}
-
-          </View>
-        )}
-
-      </View>
-
-      {/* Onglets */}
-      <View style={styles.tabContainer}>
-
-        <TouchableOpacity
-          style={[
-            styles.tab,
-            activeTab === 'ingredients' && styles.activeTab
-          ]}
-          onPress={() => setActiveTab('ingredients')}
-        >
-          <Text style={styles.tabText}>
-            Ingrédients
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.tab,
-            activeTab === 'preparation' && styles.activeTab
-          ]}
-          onPress={() => setActiveTab('preparation')}
-        >
-          <Text style={styles.tabText}>
-            Préparation
-          </Text>
-        </TouchableOpacity>
-
-      </View>
-
-      {/* Contenu dynamique */}
-      <View style={styles.dynamicContainer}>
-
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-
-          {activeTab === 'ingredients' ? (
-
-            <View style={styles.ingredientsList}>
-
-              {recette.ingredients.map((ing, i) => (
-
-                <View
-                  key={i}
-                  style={styles.ingredientRow}
-                >
-
-                  {/* Quantité */}
-                  {ing.quantite ? (
-                    <View
-                      style={[
-                        styles.quantiteBadge,
-                        {
-                          backgroundColor: getIngredientColor(ing),
-                        },
-                      ]}
-                    >
-                      <Text style={styles.quantiteText}>
-                        {ing.quantite} {ing.unite || ''}
-                      </Text>
-                    </View>
-                  ) : null}
-
-                  {/* Nom */}
-                  <Text style={styles.ingredientName}>
-                    {ing.label}
+                  <Text style={styles.createurPseudo}>
+                    {createur?.pseudo || 'Utilisateur'}
                   </Text>
 
                 </View>
 
-              ))}
+              </TouchableOpacity>
 
-            </View>
+              {/* Boutons du créateur */}
+              {estCreateur && (
+                <View style={styles.actionsContainer}>
 
-          ) : (
-
-            <View style={styles.preparationList}>
-
-              {recette.preparation.map((step, i) => (
-
-                <View
-                  key={i}
-                  style={styles.preparationStep}
-                >
-
-                  {/* Numéro de l'étape */}
-                  <View style={styles.stepBadge}>
-                    <Text style={styles.stepNumber}>
-                      {i + 1}
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() =>
+                      navigation.navigate('recetteFormulaire', {
+                        recette,
+                      })
+                    }
+                  >
+                    <Text style={styles.actionButtonText}>
+                      ✏️
                     </Text>
-                  </View>
+                  </TouchableOpacity>
 
-                  {/* Texte */}
-                  <Text style={styles.preparationText}>
-                    {step}
-                  </Text>
+                  <TouchableOpacity
+                    style={[styles.actionButton, styles.deleteButton]}
+                    onPress={supprimerRecette}
+                  >
+                    <Text style={styles.actionButtonText}>
+                      🗑️
+                    </Text>
+                  </TouchableOpacity>
 
                 </View>
-
-              ))}
+              )}
 
             </View>
-
           )}
 
-        </ScrollView>
+        </View>
+
+        {/* Onglets */}
+        <View style={styles.tabContainer}>
+
+          <TouchableOpacity
+            style={[
+              styles.tab,
+              activeTab === 'ingredients' && styles.activeTab
+            ]}
+            onPress={() => setActiveTab('ingredients')}
+          >
+            <Text style={styles.tabText}>
+              Ingrédients
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.tab,
+              activeTab === 'preparation' && styles.activeTab
+            ]}
+            onPress={() => setActiveTab('preparation')}
+          >
+            <Text style={styles.tabText}>
+              Préparation
+            </Text>
+          </TouchableOpacity>
+
+        </View>
+
+        {/* Contenu dynamique */}
+        <View style={styles.dynamicContainer}>
+
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+
+            {activeTab === 'ingredients' ? (
+
+              <View style={styles.ingredientsList}>
+
+                {recette.ingredients.map((ing, i) => (
+
+                  <View
+                    key={i}
+                    style={styles.ingredientRow}
+                  >
+
+                    {/* Quantité */}
+                    {ing.quantite ? (
+                      <View
+                        style={[
+                          styles.quantiteBadge,
+                          {
+                            backgroundColor: getIngredientColor(ing),
+                          },
+                        ]}
+                      >
+                        <Text style={styles.quantiteText}>
+                          {ing.quantite} {ing.unite || ''}
+                        </Text>
+                      </View>
+                    ) : null}
+
+                    {/* Nom */}
+                    <Text style={styles.ingredientName}>
+                      {ing.label}
+                    </Text>
+
+                  </View>
+
+                ))}
+
+              </View>
+
+            ) : (
+
+              <View style={styles.preparationList}>
+
+                {recette.preparation.map((step, i) => (
+
+                  <View
+                    key={i}
+                    style={styles.preparationStep}
+                  >
+
+                    {/* Numéro de l'étape */}
+                    <View style={styles.stepBadge}>
+                      <Text style={styles.stepNumber}>
+                        {i + 1}
+                      </Text>
+                    </View>
+
+                    {/* Texte */}
+                    <Text style={styles.preparationText}>
+                      {step}
+                    </Text>
+
+                  </View>
+
+                ))}
+
+              </View>
+
+            )}
+
+          </ScrollView>
+
+        </View>
+
+
+        <LoadingOverlay
+          visible={loading}
+          message="Suppression de la recette..."
+        />
 
       </View>
 
-      <LoadingOverlay
-        visible={loading}
-        message="Suppression de la recette..."
-      />
-
-    </View>
+    </SafeAreaView >
   );
 };
 

@@ -194,6 +194,7 @@ const Recettes = ({ navigation }) => {
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         style={recetteStyle.verticalFLatlist}
+        contentContainerStyle={{ paddingBottom: 20 }}
         renderItem={({ item }) => (
           <RecetteComposant
             item={item}
